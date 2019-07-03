@@ -6,6 +6,22 @@
 /**@type {(FormatsData | {section: string, column?: number})[]} */
 let Formats = [
 
+	//Draft League Tiers
+	{
+		section: "Draft League Tiers"
+	},
+	{
+		name: "PSS Format",
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Tapu Lele', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite'],
+		unbanlist: ['Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash'],
+		validateSet(set, teamHas) {
+			let problems = this.validateSet(set, teamHas);
+			
+			return problems;
+		},
+	},
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////
 	{

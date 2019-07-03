@@ -14,8 +14,8 @@ let Formats = [
 		name: "[Gen 7] PSS Format",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Tapu Lele', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite'],
-		unbanlist: ['Unreleased', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash']
+		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash']
 	},
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////

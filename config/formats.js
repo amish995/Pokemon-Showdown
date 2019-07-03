@@ -11,23 +11,11 @@ let Formats = [
 		section: "Draft League Tiers"
 	},
 	{
-		name: "PSS Format",
+		name: "[Gen 7] PSS Format",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Tapu Lele', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite'],
-		unbanlist: ['Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash'],
-		validateSet(set, teamHas) {
-			// let problems = this.validateSet(set, teamHas);
-			// console.log(problems)
-			// if (problems){
-			// 	console.log(problems)
-			// 	problems = problems.filter(e => e !== 'Tapu Lele\'s Hidden Ability is unreleased.')
-			// 	problems = problems.filter(e => e !== 'Tapu Lele is only obtainable from events - it needs to match one of its events, such as:')
-			// 	problems = problems.filter(e => e !== 'Tapu Lele must not have its Hidden Ability to be from its event #1.')
-			// }
-			// console.log(problems)
-			return null;
-		},
+		unbanlist: ['Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash']
 	},
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////

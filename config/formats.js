@@ -18,11 +18,14 @@ let Formats = [
 		unbanlist: ['Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash'],
 		validateSet(set, teamHas) {
 			let problems = this.validateSet(set, teamHas);
+			console.log(problems)
 			if (problems){
+				console.log(problems)
 				problems = problems.filter(e => e !== 'Tapu Lele\'s Hidden Ability is unreleased.')
 				problems = problems.filter(e => e !== 'Tapu Lele is only obtainable from events - it needs to match one of its events, such as:')
 				problems = problems.filter(e => e !== 'Tapu Lele must not have its Hidden Ability to be from its event #1.')
 			}
+			console.log(problems)
 			return problems;
 		},
 	},

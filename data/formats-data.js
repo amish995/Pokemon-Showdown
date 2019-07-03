@@ -8062,7 +8062,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": true, "isHidden": false, "moves": ["naturesmadness", "extrasensory", "flatter", "moonblast"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		unreleasedHidden: true,
+		unreleasedHidden: false,
 		tier: "OU",
 		doublesTier: "DOU",
 	},

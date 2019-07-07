@@ -11,11 +11,36 @@ let Formats = [
 		section: "Draft League Tiers"
 	},
 	{
+		name: "[Gen 7] Standard Draft League",
+		mod: 'gen7',
+		// timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Power Construct'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
+	},
+	{
+		name: "[Gen 7] Standard Draft League (No Preview)",
+		mod: 'gen7',
+		// timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Power Construct'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
+	},
+	{
+		name: "[Gen 7] DS Draft League",
+		mod: 'gen7',
+		maxForcedLevel: 50,
+		timer: {starting: 59 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Power Construct'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
+	},
+	{
 		name: "[Gen 7] PSS Format",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite'],
-		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash']
+		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Groudon + Precipice Blades', 'Deosys + Psychium Z', 'Ho-oh + Regenerator', 'Lugia + Multiscale'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Groudon', 'Deoxys', 'Ho-oh', 'Lugia', 'Xerneas']
 	},
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////

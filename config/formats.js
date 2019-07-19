@@ -36,11 +36,31 @@ let Formats = [
 		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
 	},
 	{
-		name: "[Gen 7] PSS Format",
+		name: "[Gen 7] PSS Tier",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Baton Pass', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Aegislash + King\'s Shield', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Groudon + Precipice Blades', 'Deosys + Psychium Z', 'Ho-oh + Regenerator', 'Lugia + Multiscale'],
-		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Groudon', 'Deoxys', 'Ho-oh', 'Lugia', 'Xerneas']
+		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Greninja + Protean', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Groudon + Precipice Blades', 'Deoxys + Psychium Z', 'Ho-oh + Regenerator', 'Lugia + Multiscale'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Groudon', 'Deoxys', 'Ho-oh', 'Lugia', 'Xerneas', 'Kangaskhanite', 'Kangaskhan-Mega']
+	},
+	{
+		name: "[Gen 7] NCL Tier",
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Darkrai + Nasty Plot', 'Aegislash + King\'s Shield', 'Pheromosa + Quiver Dance', 'Lunala + Roost', 'Kangaskhan + Kangaskhanite + Seismic Toss'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Lunala', 'Pheromosa', 'Kangaskhanite', 'Kangaskhan-Mega'],
+		onValidateSet(set) {
+			let itemless = ['Pheromosa']
+			let zless = ['Darkrai', 'Deoxys-Speed', 'Lunala']
+			let template = this.getTemplate(set.species);
+			if (template.species === 'Greninja' && set.ability === "Battle Bond" && set.item) return ['Greninja-Ash cannot hold an item'];
+			if (template.species === 'Genesect'){
+				if (set.item){
+					if (!set.item.includes("Drive")) return ['Genesect can only hold a Drive'];
+				}
+			} 
+			if (itemless.includes(template.name) && set.item) return [`${set.name || set.species} cannot hold an item.`];
+			if (zless.includes(template.species) && set.item.includes(" Z")) return [`${set.name || set.species} cannot hold a Z crystal.`];
+		},
 	},
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////
@@ -103,9 +123,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7uu') this.add('html', `<div class="broadcast-blue"><strong>UU is currently suspecting Mega Altaria! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3651932/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] RU",

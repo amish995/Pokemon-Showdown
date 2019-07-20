@@ -39,14 +39,14 @@ let Formats = [
 		name: "[Gen 7] PSS Tier",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Greninja + Protean', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Groudon + Precipice Blades', 'Deoxys + Psychium Z', 'Ho-oh + Regenerator', 'Lugia + Multiscale'],
-		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Groudon', 'Deoxys', 'Ho-oh', 'Lugia', 'Xerneas', 'Kangaskhanite', 'Kangaskhan-Mega']
+		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Greninja + Protean', 'Marshadow + Spectral Thief', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Groudon + Precipice Blades', 'Deoxys + Psychium Z', 'Ho-oh + Regenerator', 'Lugia + Multiscale', 'Xerneas + Moonblast', 'Xerneas + Geomancy', 'Zygarde', 'Zygarde-10%'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Groudon', 'Deoxys', 'Ho-oh', 'Lugia', 'Xerneas', 'Kangaskhanite', 'Kangaskhan-Mega', 'Xerneas']
 	},
 	{
 		name: "[Gen 7] NCL Tier",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Darkrai + Nasty Plot', 'Aegislash + King\'s Shield', 'Pheromosa + Quiver Dance', 'Lunala + Roost', 'Kangaskhan + Kangaskhanite + Seismic Toss'],
+		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Darkrai + Nasty Plot', 'Aegislash + King\'s Shield', 'Pheromosa + Quiver Dance', 'Lunala + Roost', 'Kangaskhan + Kangaskhanite + Seismic Toss', 'Acupressure', 'Double Team', 'Mud-Slap', 'Flash', 'Kinesis', 'Leaf Tornado', 'Octazooka', 'Smokescreen', 'Sand Attack', 'Minimize', 'Moody', 'Night Daze'],
 		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Lunala', 'Pheromosa', 'Kangaskhanite', 'Kangaskhan-Mega'],
 		onValidateSet(set) {
 			let itemless = ['Pheromosa']

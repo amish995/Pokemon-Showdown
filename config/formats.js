@@ -46,7 +46,7 @@ let Formats = [
 		name: "[Gen 7] NCL Tier",
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Earthquake', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Darkrai + Nasty Plot', 'Aegislash + King\'s Shield', 'Pheromosa + Quiver Dance', 'Lunala + Roost', 'Kangaskhan + Kangaskhanite + Seismic Toss', 'Acupressure', 'Double Team', 'Mud-Slap', 'Flash', 'Kinesis', 'Leaf Tornado', 'Octazooka', 'Smokescreen', 'Sand Attack', 'Minimize', 'Moody', 'Night Daze', 'Naganadel + Nasty Plot'],
+		banlist: ['Uber', 'Power Construct', 'Genesect + Shift Gear', 'Magearna', 'Psychic Surge', 'Greninja + Protean', 'Shaymin-Sky + Air Slash', 'Shaymin-Sky + Seed Flare', 'Blaziken + Speed Boost', 'Blazikenite', 'Darkrai + Nasty Plot', 'Aegislash + King\'s Shield', 'Pheromosa + Quiver Dance', 'Lunala + Roost', 'Kangaskhan + Kangaskhanite + Seismic Toss', 'Acupressure', 'Double Team', 'Mud-Slap', 'Flash', 'Kinesis', 'Leaf Tornado', 'Octazooka', 'Smokescreen', 'Sand Attack', 'Minimize', 'Moody', 'Night Daze', 'Naganadel + Nasty Plot'],
 		unbanlist: ['Floette-Eternal', 'Light of Ruin', 'Genesect', 'Blaziken', 'Giratina-Origin', 'Landorus', 'Marshadow', 'Deoxys-Defense', 'Deoxys-Speed', 'Darkrai', 'Aegislash', 'Shaymin-Sky', 'Lunala', 'Pheromosa', 'Kangaskhanite', 'Kangaskhan-Mega', 'Naganadel'],
 		onValidateSet(set) {
 			let itemless = ['Pheromosa']

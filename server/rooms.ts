@@ -56,7 +56,7 @@ type Poll = import('./chat-plugins/poll').PollType;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
-	id: string;
+	id: RoomID;
 	title: string;
 	parent: Room | null;
 	aliases: string[] | null;
@@ -105,7 +105,7 @@ export abstract class BasicRoom {
 	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;
 	highTraffic: boolean;
-	constructor(roomid: string, title?: string) {
+	constructor(roomid: RoomID, title?: string) {
 		this.id = roomid;
 		this.title = (title || roomid);
 		this.parent = null;
@@ -423,11 +423,11 @@ export class GlobalRoom extends BasicRoom {
 	/**
 	 * Rooms that users autojoin upon connecting
 	 */
-	autojoinList: ID[];
+	autojoinList: RoomID[];
 	/**
 	 * Rooms that staff autojoin upon connecting
 	 */
-	staffAutojoinList: ID[];
+	staffAutojoinList: RoomID[];
 	ladderIpLog: WriteStream;
 	lastBattle: number;
 	lastWrittenBattle: number;
@@ -438,7 +438,7 @@ export class GlobalRoom extends BasicRoom {
 	reportUserStatsInterval: NodeJS.Timeout;
 	modlogStream: WriteStream;
 	formatList: string;
-	constructor(roomid: string) {
+	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
 		super(roomid);
 
@@ -480,7 +480,11 @@ export class GlobalRoom extends BasicRoom {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
-			const id = toID(chatRoomData.title);
+			// We're okay with assinging type `ID` to `RoomID` here
+			// because the hyphens in chatrooms don't have any special
+			// meaning, unlike in helptickets, groupchats, battles etc
+			// where they are used for shared modlogs and the like
+			const id = toID(chatRoomData.title) as RoomID;
 			Monitor.notice("NEW CHATROOM: " + id);
 			const room = Rooms.createChatRoom(id, chatRoomData.title, chatRoomData);
 			if (room.aliases) {
@@ -492,7 +496,7 @@ export class GlobalRoom extends BasicRoom {
 			if (room.autojoin) this.autojoinList.push(id);
 			if (room.staffAutojoin) this.staffAutojoinList.push(id);
 		}
-		Rooms.lobby = Rooms.rooms.get('lobby') as ChatRoom;
+		Rooms.lobby = Rooms.rooms.get('lobby' as RoomID) as ChatRoom;
 
 		// init battle room logging
 		if (Config.logladderip) {
@@ -721,7 +725,7 @@ export class GlobalRoom extends BasicRoom {
 		return this;
 	}
 	addChatRoom(title: string) {
-		const id = toID(title);
+		const id = toID(title) as RoomID;
 		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
 			return false;
 		}
@@ -743,7 +747,7 @@ export class GlobalRoom extends BasicRoom {
 		let battleNum = this.lastBattle;
 		let roomid;
 		do {
-			roomid = `${roomPrefix}${++battleNum}`;
+			roomid = `${roomPrefix}${++battleNum}` as RoomID;
 		} while (Rooms.rooms.has(roomid));
 
 		this.lastBattle = battleNum;
@@ -758,7 +762,7 @@ export class GlobalRoom extends BasicRoom {
 			}
 		});
 		if (Config.reportbattles) {
-			const reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
+			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
 				const reportPlayers = players.map(p => p.getIdentity()).join('|');
 				reportRoom
@@ -774,7 +778,7 @@ export class GlobalRoom extends BasicRoom {
 
 	deregisterChatRoom(id: string) {
 		id = toID(id);
-		const room = Rooms(id);
+		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
 		if (!room.chatRoomData) return false; // room isn't registered
 		// deregister from global chatRoomData
@@ -791,8 +795,8 @@ export class GlobalRoom extends BasicRoom {
 		room.chatRoomData = null;
 		return true;
 	}
-	delistChatRoom(id: string) {
-		id = toID(id);
+	delistChatRoom(id: RoomID) {
+		id = toID(id) as RoomID;
 		if (!Rooms.rooms.has(id)) return false; // room doesn't exist
 		for (let i = this.chatRooms.length - 1; i >= 0; i--) {
 			if (id === this.chatRooms[i].id) {
@@ -803,7 +807,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 	removeChatRoom(id: string) {
 		id = toID(id);
-		const room = Rooms(id);
+		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
 		room.destroy();
 		return true;
@@ -821,7 +825,7 @@ export class GlobalRoom extends BasicRoom {
 	checkAutojoin(user: User, connection?: Connection) {
 		if (!user.named) return;
 		for (let [i, staffAutojoin] of this.staffAutojoinList.entries()) {
-			const room = Rooms(staffAutojoin) as ChatRoom | GameRoom;
+			const room = Rooms.get(staffAutojoin) as ChatRoom | GameRoom;
 			if (!room) {
 				this.staffAutojoinList.splice(i, 1);
 				i--;
@@ -838,7 +842,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 		for (const conn of user.connections) {
 			if (conn.autojoins) {
-				const autojoins = conn.autojoins.split(',');
+				const autojoins = conn.autojoins.split(',') as RoomID[];
 				for (const roomName of autojoins) {
 					// tslint:disable-next-line: no-floating-promises
 					user.tryJoinRoom(roomName, conn);
@@ -878,7 +882,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 	startLockdown(err: Error | null = null, slow = false) {
 		if (this.lockdown && err) return;
-		const devRoom = Rooms('development');
+		const devRoom = Rooms.get('development');
 		// @ts-ignore
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
@@ -914,7 +918,7 @@ export class GlobalRoom extends BasicRoom {
 		this.lastReportedCrash = Date.now();
 	}
 	automaticKillRequest() {
-		const notifyPlaces = ['development', 'staff', 'upperstaff'] as ID[];
+		const notifyPlaces = ['development', 'staff', 'upperstaff'] as RoomID[];
 		if (Config.autolockdown === undefined) Config.autolockdown = true; // on by default
 
 		if (Config.autolockdown && Rooms.global.lockdown === true && Rooms.global.battleCount === 0) {
@@ -950,10 +954,10 @@ export class GlobalRoom extends BasicRoom {
 			}, 10 * 1000);
 		}
 	}
-	notifyRooms(rooms: ID[], message: string) {
+	notifyRooms(rooms: RoomID[], message: string) {
 		if (!rooms || !message) return;
 		for (const roomid of rooms) {
-			const curRoom = Rooms(roomid);
+			const curRoom = Rooms.get(roomid);
 			if (curRoom) curRoom.add(message).update();
 		}
 	}
@@ -985,14 +989,33 @@ export class GlobalRoom extends BasicRoom {
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
 		const crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
-		const devRoom = Rooms('development');
+		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
 		} else {
 			if (Rooms.lobby) Rooms.lobby.add(crashMessage).update();
-			const staffRoom = Rooms('staff');
+			const staffRoom = Rooms.get('staff');
 			if (staffRoom) staffRoom.add(crashMessage).update();
 		}
+	}
+	/**
+	 * Destroys personal rooms of a (punished) user
+	 * Returns a list of the user's remaining public auth
+	 */
+	destroyPersonalRooms(userid: ID) {
+		const roomauth = [];
+		for (const [id, curRoom] of Rooms.rooms) {
+			if (id === 'global' || !curRoom.auth) continue;
+			if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
+				curRoom.destroy();
+			} else {
+				if (curRoom.isPrivate || curRoom.battle || !curRoom.auth) continue;
+
+				const group = curRoom.auth[userid];
+				if (group) roomauth.push(`${group}${id}`);
+			}
+		}
+		return roomauth;
 	}
 }
 
@@ -1025,7 +1048,7 @@ export class BasicChatRoom extends BasicRoom {
 	game: RoomGame | null;
 	battle: RoomBattle | null;
 	tour: Tournament | null;
-	constructor(roomid: string, title?: string, options: AnyObject = {}) {
+	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
 		if (options.logTimes === undefined) options.logTimes = true;
@@ -1063,7 +1086,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		this.parent = null;
 		if (options.parentid) {
-			const parent = Rooms(options.parentid);
+			const parent = Rooms.get(options.parentid);
 
 			if (parent) {
 				if (!parent.subRooms) parent.subRooms = new Map();
@@ -1383,7 +1406,7 @@ export class ChatRoom extends BasicChatRoom {
 	active: false;
 	type: 'chat';
 	constructor() {
-		super('');
+		super('' as RoomID);
 		this.battle = null;
 		this.active = false;
 		this.type = 'chat';
@@ -1407,7 +1430,7 @@ export class GameRoom extends BasicChatRoom {
 	rated: number;
 	battle: RoomBattle | null;
 	game: RoomGame;
-	constructor(roomid: string, title?: string, options: AnyObject = {}) {
+	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		options.logTimes = false;
 		options.autoTruncate = false;
 		options.isMultichannel = true;
@@ -1503,28 +1526,28 @@ function getRoom(roomid?: string | Room): Room {
 	return Rooms.rooms.get(roomid);
 }
 
-export const Rooms = Object.assign(getRoom, {
+export const Rooms = {
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
-	 * the Rooms(roomid) accessor) when necessary.
+	 * the Rooms.get(roomid) accessor) when necessary.
 	 */
-	rooms: new Map<string, Room>(),
-	aliases: new Map<string, string>(),
+	rooms: new Map<RoomID, Room>(),
+	aliases: new Map<string, RoomID>(),
 
 	get: getRoom,
 	search(name: string): Room | undefined {
 		return getRoom(name) || getRoom(toID(name)) || getRoom(Rooms.aliases.get(toID(name)));
 	},
 
-	createGameRoom(roomid: string, title: string, options: AnyObject) {
+	createGameRoom(roomid: RoomID, title: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		Monitor.debug("NEW BATTLE ROOM: " + roomid);
 		const room = new GameRoom(roomid, title, options);
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
-	createChatRoom(roomid: string, title: string, options: AnyObject) {
+	createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		const room = new BasicChatRoom(roomid, title, options) as ChatRoom;
 		Rooms.rooms.set(roomid, room);
@@ -1648,12 +1671,12 @@ export const Rooms = Object.assign(getRoom, {
 	RoomBattlePlayer,
 	RoomBattleTimer,
 	PM: RoomBattlePM,
-});
+};
 
 // initialize
 
 Monitor.notice("NEW GLOBAL: global");
 
-Rooms.global = new GlobalRoom('global');
+Rooms.global = new GlobalRoom('global' as RoomID);
 
-Rooms.rooms.set('global', Rooms.global);
+Rooms.rooms.set('global' as RoomID, Rooms.global);

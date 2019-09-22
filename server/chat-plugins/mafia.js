@@ -175,7 +175,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	}
 
 	updateHtmlRoom() {
-		const user = Users(this.userid);
+		const user = Users.get(this.userid);
 		if (!user || !user.connected) return;
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.id}\n|deinit`);
 		for (const conn of user.connections) {
@@ -345,6 +345,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					memo: [`To learn more about your role, PM the host (${this.host}).`],
 				};
 			});
+			this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 			this.roles = this.originalRoles.slice();
 			this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 			this.roleString = this.originalRoleString;
@@ -381,6 +382,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA.data = null;
 
 		this.originalRoles = newRoles;
+		this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 		this.roleString = this.originalRoleString;
@@ -540,7 +542,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			for (let p in this.playerTable) {
 				let role = /** @type {MafiaRole} */(roles.shift());
 				this.playerTable[p].role = role;
-				let u = Users(p);
+				let u = Users.get(p);
 				if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
 			}
 		}
@@ -604,7 +606,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.timer) this.setDeadline(0, true);
 		this.phase = 'night';
 		for (const hostid of [...this.cohosts, this.hostid]) {
-			let host = Users(hostid);
+			let host = Users.get(hostid);
 			if (host && host.connected) host.send(`>${this.room.id}\n|notify|It's night in your game of Mafia!`);
 		}
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
@@ -645,7 +647,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		player.lynching = target;
 		let name = player.lynching === 'nolynch' ? 'No Lynch' : this.playerTable[player.lynching].name;
-		const targetUser = Users(userid);
+		const targetUser = Users.get(userid);
 		if (previousLynch) {
 			this.sendRoom(`${(targetUser ? targetUser.name : userid)} has shifted their lynch from ${previousLynch === 'nolynch' ? 'No Lynch' : this.playerTable[previousLynch].name} to ${name}`, {timestamp: true});
 		} else {
@@ -689,7 +691,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			lynch.dir = 'down';
 			lynch.lynchers.splice(lynch.lynchers.indexOf(userid), 1);
 		}
-		const targetUser = Users(userid);
+		const targetUser = Users.get(userid);
 		if (!force) this.sendRoom(player.lynching === 'nolynch' ? `${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.` : `${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`, {timestamp: true});
 		player.lynching = '';
 		player.lastLynch = Date.now();
@@ -977,9 +979,10 @@ class MafiaTracker extends Rooms.RoomGame {
 				};
 				this.roles.push(deadPlayer.role);
 			}
+			this.roles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 			delete this.dead[deadPlayer.userid];
 		} else {
-			const targetUser = Users(toRevive);
+			const targetUser = Users.get(toRevive);
 			if (!targetUser) return;
 			const canJoin = this.canJoin(targetUser, false, force);
 			if (canJoin) {
@@ -1067,7 +1070,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let oldPlayer = this.playerTable[player];
 		if (!oldPlayer) return; // should never happen
 
-		const newUser = Users(replacement);
+		const newUser = Users.get(replacement);
 		if (!newUser) return; // should never happen
 		let newPlayer = this.makePlayer(newUser);
 		newPlayer.role = oldPlayer.role;
@@ -1122,7 +1125,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!this.subs.length || (!this.hostRequestedSub.length && ((!this.requestedSub.length || !this.autoSub)) && !userid)) return;
 		const nextSub = this.subs.shift();
 		if (!nextSub) return;
-		const sub = Users(nextSub, true);
+		const sub = Users.get(nextSub, true);
 		if (!sub || !sub.connected || !sub.named || !this.room.users[sub.userid]) return; // should never happen, just to be safe
 		const toSubOut = userid || this.hostRequestedSub.shift() || this.requestedSub.shift();
 		if (!toSubOut) {
@@ -1216,7 +1219,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				player.IDEA.picks[pick] = null;
 				this.IDEA.waitingPick.push(p);
 			}
-			const u = Users(p);
+			const u = Users.get(p);
 			// @ts-ignore guaranteed at this point
 			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Pick your role in the IDEA module.`);
 		}
@@ -1364,7 +1367,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	updateHost() {
 		for (const hostid of [...this.cohosts, this.hostid]) {
-			const host = Users(hostid);
+			const host = Users.get(hostid);
 			if (!host || !host.connected) return;
 			for (const conn of host.connections) {
 				Chat.resolvePage(`view-mafia-${this.room.id}`, host, conn);
@@ -1433,7 +1436,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @param {string} message
 	 */
 	sendUser(user, message) {
-		const userObject = (typeof user === 'string' ? Users(user) : user);
+		const userObject = (typeof user === 'string' ? Users.get(user) : user);
 		if (!userObject || !userObject.connected) return;
 		userObject.sendTo(this.room, message);
 	}
@@ -1540,10 +1543,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
-	 * @return {void}
+	 * @param {ID} oldUserid
 	 */
-	onLeave(user) {
-		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
+	onLeave(user, oldUserid) {
+		const userid = oldUserid || user.userid;
+		if (this.subs.includes(userid)) this.subs.splice(this.subs.indexOf(userid), 1);
 	}
 
 	/**
@@ -1622,7 +1626,7 @@ const pages = {
 		if (!query.length) return this.close();
 		let roomid = query.shift();
 		if (roomid === 'groupchat') roomid += `-${query.shift()}-${query.shift()}`;
-		const room = /** @type {ChatRoom} */ (Rooms(roomid));
+		const room = /** @type {ChatRoom} */ (Rooms.get(roomid));
 		if (!room || !room.users[user.userid] || !room.game || room.game.gameid !== 'mafia' || room.game.ended) return this.close();
 		const game = /** @type {MafiaTracker} */ (room.game);
 		const isPlayer = user.userid in game.playerTable;
@@ -1631,7 +1635,19 @@ const pages = {
 		let buf = `<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.id}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>`;
-		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.playerTable).sort().map(p => game.playerTable[p].safeName).join(', ')}</p><hr/>`;
+		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.playerTable).sort().map(p => game.playerTable[p].safeName).join(', ')}</p>`;
+		if (!isHost && game.started && Object.keys(game.dead).length > 0) {
+			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
+			for (let d in game.dead) {
+				let dead = game.dead[d];
+				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.role && !game.noReveal ? '(' + dead.getRole() + ')' : ''}`;
+				if (dead.treestump) buf += ` (is a Treestump)`;
+				if (dead.restless) buf += ` (is a Restless Spirit)`;
+				buf += `</p>`;
+			}
+			buf += `</details></p>`;
+		}
+		buf += `<hr/>`;
 		if (isPlayer && game.phase === 'IDEApicking') {
 			buf += `<p><b>IDEA information:</b><br />`;
 			const IDEA = game.playerTable[user.userid].IDEA;
@@ -1798,7 +1814,7 @@ const pages = {
 	},
 	mafialadder(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!query.length || !Rooms('mafia')) return this.close();
+		if (!query.length || !Rooms.get('mafia')) return this.close();
 		/** @type {{[k: string]: {title: string, type: string, section: MafiaLogSection}}} */
 		const headers = {
 			leaderboard: {title: 'Leaderboard', type: 'Points', section: 'leaderboard'},
@@ -1812,7 +1828,7 @@ const pages = {
 		const month = date.toLocaleString("en-us", {month: "numeric", year: "numeric"});
 		const ladder = headers[query[0]];
 		if (!ladder) return this.close();
-		const mafiaRoom = /** @type {ChatRoom?} */ (Rooms('mafia'));
+		const mafiaRoom = /** @type {ChatRoom?} */ (Rooms.get('mafia'));
 		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !this.can('mute', null, mafiaRoom)) return;
 		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})`;
 		let buf = `<div class="pad ladder">`;
@@ -1922,7 +1938,7 @@ const commands = {
 			case 'forceadd':
 			case 'add':
 				if (!this.canTalk()) return;
-				let targetUser = Users(args[1]);
+				let targetUser = Users.get(args[1]);
 				if ((!targetUser || !targetUser.connected) && args[0] !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
 				if (hostQueue.includes(args[1])) return this.errorReply(`User ${args[1]} is already on the host queue.`);
 				if (isHostBanned(args[1])) return this.errorReply(`User ${args[1]} is banned from hosting games.`);
@@ -1970,7 +1986,7 @@ const commands = {
 		// Typescript doesn't like "join" as the command name for some reason, so this is a hack to get around that.
 		join: 'mafjoin',
 		mafjoin(target, room, user) {
-			let targetRoom = /** @type {ChatRoom} */ (Rooms(target));
+			let targetRoom = /** @type {ChatRoom} */ (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -1985,7 +2001,7 @@ const commands = {
 
 		'!leave': true,
 		leave(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2013,7 +2029,7 @@ const commands = {
 
 		'!close': true,
 		close(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2033,7 +2049,7 @@ const commands = {
 		cs: 'closedsetup',
 		closedsetup(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2055,7 +2071,7 @@ const commands = {
 		'!reveal': true,
 		reveal(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2133,7 +2149,7 @@ const commands = {
 		'!ideapick': true,
 		ideapick(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2149,7 +2165,7 @@ const commands = {
 
 		'!ideareroll': true,
 		ideareroll(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2193,7 +2209,7 @@ const commands = {
 		'!start': true,
 		nightstart: 'start',
 		start(target, room, user, connection, cmd) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2218,7 +2234,7 @@ const commands = {
 		night: 'day',
 		day(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2251,7 +2267,7 @@ const commands = {
 		l: 'lynch',
 		lynch(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2271,7 +2287,7 @@ const commands = {
 		unl: 'unlynch',
 		unnolynch: 'unlynch',
 		unlynch(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2293,7 +2309,7 @@ const commands = {
 		enableself: 'selflynch',
 		selflynch(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2324,7 +2340,7 @@ const commands = {
 		kick: 'kill',
 		kill(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2351,7 +2367,7 @@ const commands = {
 		add: 'revive',
 		revive(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2521,7 +2537,7 @@ const commands = {
 		'!enablenl': true,
 		disablenl: 'enablenl',
 		enablenl(target, room, user, connection, cmd) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2647,7 +2663,7 @@ const commands = {
 		sub: 'mafsub', // Typescript doesn't like "sub" as the command name for some reason, so this is a hack to get around that.
 		mafsub(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2732,7 +2748,7 @@ const commands = {
 				const toSubIn = toID(args.shift());
 				if (!(toSubOut in game.playerTable)) return user.sendTo(targetRoom, `|error|${toSubOut} is not in the game.`);
 
-				const targetUser = Users(toSubIn);
+				const targetUser = Users.get(toSubIn);
 				if (!targetUser) return user.sendTo(targetRoom, `|error|The user "${toSubIn}" was not found.`);
 				const canJoin = game.canJoin(targetUser, false, cmd === 'forcesub');
 				if (canJoin) return user.sendTo(targetRoom, `|error|${canJoin}`);
@@ -2754,7 +2770,7 @@ const commands = {
 		"!autosub": true,
 		autosub(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2810,7 +2826,7 @@ const commands = {
 				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
 			} else {
 				const oldHostid = game.hostid;
-				const oldHost = Users(game.hostid);
+				const oldHost = Users.get(game.hostid);
 				if (oldHost) oldHost.send(`>view-mafia-${room.id}\n|deinit`);
 				if (game.subs.includes(targetUser.userid)) game.subs.splice(game.subs.indexOf(targetUser.userid), 1);
 				const queueIndex = hostQueue.indexOf(targetUser.userid);
@@ -2849,7 +2865,7 @@ const commands = {
 
 		'!end': true,
 		end(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;

@@ -42,6 +42,8 @@ export class Tools {
 			text = text.id;
 		} else if (text && text.userid) {
 			text = text.userid;
+		} else if (text && text.roomid) {
+			text = text.roomid;
 		}
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
@@ -158,8 +160,10 @@ export type ComplexTeamBan = ComplexBan;
  * - '-[thing]' or '-[category]:[thing]' ban a thing
  * - '+[thing]' or '+[category]:[thing]' allow a thing (override a ban)
  * [category] is one of: item, move, ability, species, basespecies
+ *
+ * The value is the name of the parent rule (blank for the active format).
  */
-export class RuleTable extends Map {
+export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
 	// tslint:disable-next-line:ban-types
@@ -174,14 +178,23 @@ export class RuleTable extends Map {
 		this.timer = null;
 	}
 
-	check(thing: string, setHas: {[id: string]: true} | null = null): string {
+	isBanned(thing: string) {
+		if (this.has(`+${thing}`)) return false;
+		return this.has(`-${thing}`);
+	}
+
+	check(thing: string, setHas: {[id: string]: true} | null = null) {
+		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
 		return this.getReason(`-${thing}`);
 	}
 
-	getReason(key: string): string {
+	getReason(key: string): string | null {
 		const source = this.get(key);
-		if (source === undefined) return '';
+		if (source === undefined) return null;
+		if (key === '-nonexistent' || key.startsWith('obtainable')) {
+			return 'not obtainable';
+		}
 		return source ? `banned by ${source}` : `banned`;
 	}
 
@@ -260,10 +273,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly teamLength?: {battle?: number, validate?: [number, number]};
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
-	/** Pokemon must be obtained from Gen 6 or later. */
-	readonly requirePentagon: boolean;
-	/** Pokemon must be obtained from Gen 7 or later. */
-	readonly requirePlus: boolean;
+	/** Pokemon must be obtained from this generation or later. */
+	readonly minSourceGen?: number;
 	/**
 	 * Maximum possible level pokemon you can bring. Note that this is
 	 * still 100 in VGC, because you can bring level 100 pokemon,
@@ -312,8 +323,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.ruleTable = null;
 		this.teamLength = data.teamLength || undefined;
 		this.onBegin = data.onBegin || undefined;
-		this.requirePentagon = !!data.requirePentagon;
-		this.requirePlus = !!data.requirePlus;
+		this.minSourceGen = data.minSourceGen || undefined;
 		this.maxLevel = data.maxLevel || 100;
 		this.defaultLevel = data.defaultLevel || this.maxLevel;
 		this.forcedLevel = data.forcedLevel || undefined;
@@ -462,7 +472,9 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect & Abili
 		this.rating = data.rating!;
 
 		if (!this.gen) {
-			if (this.num >= 192) {
+			if (this.num >= 234) {
+				this.gen = 8;
+			} else if (this.num >= 192) {
 				this.gen = 7;
 			} else if (this.num >= 165) {
 				this.gen = 6;
@@ -530,9 +542,11 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** Added type (used in OMs). */
 	readonly addedType?: string;
 	/** Pre-evolution. '' if nothing evolves into this Pokemon. */
-	readonly prevo: string;
+	readonly prevo: ID;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
-	readonly evos: string[];
+	readonly evos: ID[];
+	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
+	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
@@ -550,8 +564,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly baseStats: StatsTable;
 	/** Max HP. Overrides usual HP calculations (for Shedinja). */
 	readonly maxHP?: number;
-	/** Weight (in kg). */
+	/** Weight (in kg). Not valid for OMs; use weighthg / 10 instead. */
 	readonly weightkg: number;
+	/** Weight (in integer multiples of 0.1kg). */
+	readonly weighthg: number;
 	/** Height (in m). */
 	readonly heightm: number;
 	/** Color. */
@@ -567,6 +583,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
+	/** Name of its Gigantamax move, if a pokemon is gigantamax. */
+	readonly isGigantamax?: string;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: boolean;
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -631,6 +649,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.tier = data.tier || '';
 		this.doublesTier = data.doublesTier || '';
 		this.evos = data.evos || [];
+		this.evoType = data.evoType || undefined;
+		this.evoMove = data.evoMove || undefined;
 		this.evoLevel = data.evoLevel || undefined;
 		this.nfe = !!this.evos.length;
 		this.eggGroups = data.eggGroups || [];
@@ -643,6 +663,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats!;
 		this.weightkg = data.weightkg!;
+		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm!;
 		this.color = data.color || '';
 		this.unreleasedHidden = !!data.unreleasedHidden;
@@ -652,10 +673,13 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.eventOnly = !!data.eventOnly;
 		this.eventPokemon = data.eventPokemon || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
-		this.battleOnly = !!data.battleOnly || !!this.isMega || undefined;
+		this.isGigantamax = data.isGigantamax || undefined;
+		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
+			if (this.num >= 810 || this.forme.endsWith('Galar') || this.forme === 'Gmax') {
+				this.gen = 8;
+			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
@@ -749,10 +773,10 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	 * move damage.
 	 */
 	readonly defensiveCategory?: MoveCategory;
-	/** Whether or not this move uses the target's boosts. */
+	/** Uses the target's Atk/SpA as the attacking stat, instead of the user's. */
 	readonly useTargetOffensive: boolean;
-	/** Whether or not this move uses the user's boosts. */
-	readonly useSourceDefensive: boolean;
+	/** Use the user's Def/SpD as the attacking stat, instead of Atk/SpA. */
+	readonly useSourceDefensiveAsOffensive: boolean;
 	/** Whether or not this move ignores negative attack boosts. */
 	readonly ignoreNegativeOffensive: boolean;
 	/** Whether or not this move ignores positive defense boosts. */
@@ -772,6 +796,8 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly noPPBoosts: boolean;
 	/** Is this move a Z-Move? */
 	readonly isZ: boolean | string;
+	/** Max/G-Max move power */
+	readonly gmaxPower?: number;
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: ID | boolean;
@@ -821,7 +847,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.category = data.category!;
 		this.defensiveCategory = data.defensiveCategory || undefined;
 		this.useTargetOffensive = !!data.useTargetOffensive;
-		this.useSourceDefensive = !!data.useSourceDefensive;
+		this.useSourceDefensiveAsOffensive = !!data.useSourceDefensiveAsOffensive;
 		this.ignoreNegativeOffensive = !!data.ignoreNegativeOffensive;
 		this.ignorePositiveDefensive = !!data.ignorePositiveDefensive;
 		this.ignoreOffensive = !!data.ignoreOffensive;
@@ -842,8 +868,48 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.stab = data.stab || undefined;
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
+		if (this.category !== 'Status' && !this.gmaxPower) {
+			if (!this.basePower) {
+				this.gmaxPower = 100;
+			} else if (['Fighting', 'Poison'].includes(this.type)) {
+				if (this.basePower >= 150) {
+					this.gmaxPower = 100;
+				} else if (this.basePower >= 110) {
+					this.gmaxPower = 95;
+				} else if (this.basePower >= 75) {
+					this.gmaxPower = 90;
+				} else if (this.basePower >= 65) {
+					this.gmaxPower = 85;
+				} else if (this.basePower >= 55) {
+					this.gmaxPower = 80;
+				} else if (this.basePower >= 45) {
+					this.gmaxPower = 75;
+				} else  {
+					this.gmaxPower = 70;
+				}
+			} else {
+				if (this.basePower >= 150) {
+					this.gmaxPower = 150;
+				} else if (this.basePower >= 110) {
+					this.gmaxPower = 140;
+				} else if (this.basePower >= 75) {
+					this.gmaxPower = 130;
+				} else if (this.basePower >= 65) {
+					this.gmaxPower = 120;
+				} else if (this.basePower >= 55) {
+					this.gmaxPower = 110;
+				} else if (this.basePower >= 45) {
+					this.gmaxPower = 100;
+				} else  {
+					this.gmaxPower = 90;
+				}
+			}
+		}
+
 		if (!this.gen) {
-			if (this.num >= 622) {
+			if (this.num >= 743) {
+				this.gen = 8;
+			} else if (this.num >= 622) {
 				this.gen = 7;
 			} else if (this.num >= 560) {
 				this.gen = 6;

@@ -64,8 +64,10 @@ let Formats = [
 			// 		}
 			// 	}
 			// }
-			for (const pokemon of side.pokemon){
-				pokemon.canDynamax = false;
+			for (const side of this.sides){
+				for (const pokemon of side.pokemon){
+					pokemon.canDynamax = false;
+				}
 			}
 		},
 	},

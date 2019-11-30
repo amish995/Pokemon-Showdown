@@ -198,7 +198,6 @@ export class Pokemon {
 
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
-	canDynamax: string | boolean | null | undefined;
 	canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
@@ -208,12 +207,16 @@ export class Pokemon {
 	modifiedStats?: StatsExceptHPTable;
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
-	// OMs
+	/**
+	 * An object for storing untyped data, for mods to use.
+	 */
 	m: PokemonModData;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
 		this.battle = side.battle;
+
+		this.m = {};
 
 		const pokemonScripts = this.battle.dex.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
@@ -374,10 +377,6 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
-		// Set to true if appropriate initially to allow battle.canDynamax to work.
-		this.canDynamax = (this.battle.gen >= 8);
-		const canDynamax = this.battle.canDynamax(this);
-		this.canDynamax = canDynamax && canDynamax.gigantamax ? canDynamax.gigantamax : !!canDynamax;
 		this.canGigantamax = gMax;
 
 		// This is used in gen 1 only, here to avoid code repetition.
@@ -387,11 +386,6 @@ export class Pokemon {
 		this.clearVolatile();
 		this.maxhp = this.template.maxHP || this.baseStoredStats.hp;
 		this.hp = this.maxhp;
-
-		/**
-		 * An object for storing untyped data, for mods to use.
-		 */
-		this.m = {};
 	}
 
 	toJSON(): AnyObject {
@@ -830,8 +824,8 @@ export class Pokemon {
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 			// TODO interaction between dynamax and choice locked moves?
-			if (this.canDynamax) data.canDynamax = true;
-			if (this.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
+			if (this.battle.canDynamax(this)) data.canDynamax = true;
+			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
 		}
 
 		return data;
@@ -914,7 +908,7 @@ export class Pokemon {
 		const template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-			!this.setTemplate(template)) {
+			!this.setTemplate(template) || template.species === 'Eternatus-Eternamax') {
  			return false;
 		}
 		this.transformed = true;
@@ -1109,7 +1103,11 @@ export class Pokemon {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
-		this.volatiles = {};
+		if (this.species === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
+			this.volatiles = {dynamax: this.volatiles.dynamax};
+		} else {
+			this.volatiles = {};
+		}
 		if (includeSwitchFlags) {
 			this.switchFlag = false;
 			this.forceSwitchFlag = false;

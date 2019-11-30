@@ -45,28 +45,23 @@ let Formats = [
 		name: "[Gen 8] PSS Tier",
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', 'NatDex'],
-		banlist: ['Uber', 'Rusted Shield', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost","Hidden Power", "Return", "Frustration", "Pursuit"],
+		banlist: ['Uber', 'Rusted Shield', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost","Hidden Power", "Return", "Frustration", "Pursuit",],
 		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense'],
 		onBegin() {
 			// if you have a mega or z, you can't dynamax
-			// for (const side of this.sides) {
-			// 	let canMegaOrZ = true;
-			// 	for (const pokemon of side.pokemon) {
-			// 		const item = this.dex.getItem(pokemon.item);
-			// 		if (item.megaStone || item.zMove) {
-			// 			canMegaOrZ = true;
-			// 			break;
-			// 		}
-			// 	}
-			// 	if (canMegaOrZ) {
-			// 		for (const pokemon of side.pokemon) {
-			// 			pokemon.canDynamax = false;
-			// 		}
-			// 	}
-			// }
-			for (const side of this.sides){
-				for (const pokemon of side.pokemon){
-					pokemon.canDynamax = false;
+			for (const side of this.sides) {
+				let canMegaOrZ = true;
+				for (const pokemon of side.pokemon) {
+					const item = this.dex.getItem(pokemon.item);
+					if (true) {
+						canMegaOrZ = true;
+						break;
+					}
+				}
+				if (canMegaOrZ) {
+					for (const pokemon of side.pokemon) {
+						pokemon.canDynamax = false;
+					}
 				}
 			}
 		},

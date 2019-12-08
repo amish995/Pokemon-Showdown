@@ -7700,32 +7700,6 @@ let BattleMovedex = {
 		name: "Hail",
 		pp: 10,
 		priority: 0,
-<<<<<<< HEAD
-		flags: {},
-		weather: 'hail',
-		secondary: null,
-		target: "all",
-		type: "Ice",
-		zMoveBoost: {spe: 1},
-		contestType: "Beautiful",
-	},
-	"hammerarm": {
-		num: 359,
-		accuracy: 90,
-		basePower: 100,
-		category: "Physical",
-		desc: "Lowers the user's Speed by 1 stage.",
-		shortDesc: "Lowers the user's Speed by 1.",
-		id: "hammerarm",
-		isViable: true,
-		name: "Hammer Arm",
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		self: {
-			boosts: {
-				spe: -1,
-=======
 		flags: {nonsky: 1},
 		terrain: 'grassyterrain',
 		effect: {
@@ -7768,7 +7742,6 @@ let BattleMovedex = {
 			onEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
->>>>>>> 2854e71166cf274e3dd0782dbdc3c2561145d30c
 			},
 		},
 		secondary: null,

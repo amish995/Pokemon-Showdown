@@ -533,7 +533,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 6,
 			onResidual(pokemon) {
-				this.heal(pokemon.maxhp / 16);
+				this.heal(pokemon.baseMaxhp / 16);
 			},
 		},
 		secondary: null,
@@ -1031,7 +1031,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from moves. Contact: poison.",
 		id: "banefulbunker",
 		isViable: true,
@@ -2811,7 +2811,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Roar, Shell Trap, Sketch, Sleep Talk, Snatch, Spiky Shield, Spotlight, Struggle, Switcheroo, Thief, Transform, Trick, Whirlwind, or any Z-Move.",
+		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Circle Throw, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Obstruct, Protect, Rage Powder, Roar, Shell Trap, Sketch, Sleep Talk, Snatch, Spiky Shield, Spotlight, Struggle, Switcheroo, Thief, Transform, Trick, Whirlwind, or any Z-Move.",
 		shortDesc: "Uses the last move used in the battle.",
 		id: "copycat",
 		name: "Copycat",
@@ -2820,7 +2820,7 @@ let BattleMovedex = {
 		flags: {},
 		onHit(pokemon) {
 			let noCopycat = [
-				'assist', 'banefulbunker', 'bestow', 'celebrate', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'dragontail', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'protect', 'ragepowder', 'roar', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'transform', 'trick', 'whirlwind',
+				'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'dragontail', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'holdhands', 'kingsshield', 'matblock', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'obstruct', 'protect', 'ragepowder', 'roar', 'shelltrap', 'sketch', 'sleeptalk', 'snatch', 'spikyshield', 'spotlight', 'struggle', 'switcheroo', 'thief', 'transform', 'trick', 'whirlwind',
 			];
 			const move = this.lastMove;
 			if (!move || noCopycat.includes(move.id) || move.isZ || move.isMax) {
@@ -3265,7 +3265,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 10,
 			onResidual(pokemon) {
-				this.damage(pokemon.maxhp / 4);
+				this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 		secondary: null,
@@ -3462,7 +3462,7 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
-			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -3477,6 +3477,7 @@ let BattleMovedex = {
 					success = true;
 				}
 			}
+			this.field.clearTerrain();
 			return success;
 		},
 		secondary: null,
@@ -3538,7 +3539,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Prevents moves from affecting the user this turn.",
 		id: "detect",
 		isViable: true,
@@ -3663,7 +3664,7 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZ) {
+			if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax) {
 				return false;
 			}
 		},
@@ -4781,7 +4782,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return target.hp - pokemon.hp;
+			return target.getUndynamaxedHP() - pokemon.hp;
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to (target's current HP - user's current HP). The target is unaffected if its current HP is less than or equal to the user's current HP.",
@@ -4807,7 +4808,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "User survives attacks this turn with at least 1 HP.",
 		id: "endure",
 		name: "Endure",
@@ -5432,7 +5433,7 @@ let BattleMovedex = {
 			onResidual(side) {
 				for (const pokemon of side.active) {
 					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.maxhp / 8, pokemon);
+						this.damage(pokemon.baseMaxhp / 8, pokemon);
 					}
 				}
 			},
@@ -5608,7 +5609,7 @@ let BattleMovedex = {
 			}
 			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
+					this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 				}
 			}
 		},
@@ -5618,7 +5619,7 @@ let BattleMovedex = {
 			}
 			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
+					this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 				}
 			}
 		},
@@ -6853,7 +6854,7 @@ let BattleMovedex = {
 		self: {
 			onHit(source) {
 				for (let pokemon of source.side.foe.active) {
-					pokemon.addVolatile('partiallytrapped');
+					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('Fire Spin'), 'trapper');
 				}
 			},
 		},
@@ -7158,9 +7159,7 @@ let BattleMovedex = {
 		self: {
 			onHit(source) {
 				for (let pokemon of source.side.foe.active) {
-					if (!pokemon.volatiles['substitute']) {
-						pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('Sand Tomb'), 'trapper');
-					}
+					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('Sand Tomb'), 'trapper');
 				}
 			},
 		},
@@ -7312,7 +7311,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Foe(s): -1 evasion. BP scales with base move's BP.",
+		shortDesc: "Cures team's statuses. BP scales with base move's BP.",
 		id: "gmaxsweetness",
 		isNonstandard: "Custom",
 		name: "G-Max Sweetness",
@@ -7321,14 +7320,9 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Appletun",
 		self: {
-			onHit(source, pokemon, move) {
+			onHit(source) {
 				this.add('-activate', source, 'move: G-Max Sweetness');
 				for (const ally of source.side.pokemon) {
-					// TODO: test move's interaction with sap sipper and Substitute
-					if (ally !== source && ((ally.hasAbility('sapsipper')) ||
-							(ally.volatiles['substitute'] && !move.infiltrates))) {
-						continue;
-					}
 					ally.cureStatus();
 				}
 			},
@@ -7414,7 +7408,7 @@ let BattleMovedex = {
 			},
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
-					this.damage(pokemon.maxhp / 8, pokemon);
+					this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 			},
 			onEnd(targetSide) {
@@ -7477,7 +7471,7 @@ let BattleMovedex = {
 			},
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Fire')) this.damage(pokemon.maxhp / 6, pokemon);
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
@@ -7706,6 +7700,7 @@ let BattleMovedex = {
 		name: "Hail",
 		pp: 10,
 		priority: 0,
+<<<<<<< HEAD
 		flags: {},
 		weather: 'hail',
 		secondary: null,
@@ -7730,6 +7725,50 @@ let BattleMovedex = {
 		self: {
 			boosts: {
 				spe: -1,
+=======
+		flags: {nonsky: 1},
+		terrain: 'grassyterrain',
+		effect: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePower(basePower, attacker, defender, move) {
+				let weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
+				if (weakenedMoves.includes(move.id)) {
+					this.debug('move weakened by grassy terrain');
+					return this.chainModify(0.5);
+				}
+				if (move.type === 'Grass' && attacker.isGrounded()) {
+					this.debug('grassy terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Grassy Terrain');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onTerrain(pokemon) {
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
+					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				}
+			},
+			onEnd() {
+				if (!this.effectData.duration) this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Grassy Terrain');
+>>>>>>> 2854e71166cf274e3dd0782dbdc3c2561145d30c
 			},
 		},
 		secondary: null,
@@ -7899,11 +7938,12 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		damageCallback(pokemon, target) {
+			const hp75 = Math.floor(target.getUndynamaxedHP() * 3 / 4);
 			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.getSideCondition('matblock') || target.volatiles['protect'] || target.volatiles['spikyshield']) {
 				this.add('-zbroken', target);
-				return this.dex.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
+				return this.dex.clampIntRange(Math.ceil(hp75 / 4 - 0.5), 1);
 			}
-			return this.dex.clampIntRange(Math.floor(target.hp * 3 / 4), 1);
+			return this.dex.clampIntRange(hp75, 1);
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
@@ -9027,7 +9067,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.maxhp / 2, source, source, this.dex.getEffect('High Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('High Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -9781,7 +9821,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 7,
 			onResidual(pokemon) {
-				this.heal(pokemon.maxhp / 16);
+				this.heal(pokemon.baseMaxhp / 16);
 			},
 			onTrapPokemon(pokemon) {
 				pokemon.tryTrap();
@@ -9994,7 +10034,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.maxhp / 2, source, source, this.dex.getEffect('Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -10047,7 +10087,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from attacks. Contact: lowers Atk by 1.",
 		id: "kingsshield",
 		isViable: true,
@@ -10364,7 +10404,7 @@ let BattleMovedex = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				let damage = this.damage(pokemon.maxhp / 8, pokemon, target);
+				let damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
 				if (damage) {
 					this.heal(damage, target, pokemon);
 				}
@@ -11364,7 +11404,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from all attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from all attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Prevents all moves from affecting the user this turn.",
 		id: "maxguard",
 		isViable: true,
@@ -12067,14 +12107,14 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move is selected for use, other than After You, Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Endure, Feint, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Hold Hands, Hyperspace Hole, Ice Burn, Instruct, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Nature Power, Photon Geyser, Plasma Fists, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spotlight, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard.",
+		desc: "A random move is selected for use, other than After You, Assist, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Dynamax Cannon, Endure, Eternabeam, Feint, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Hold Hands, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Nature Power, Origin Pulse, Photon Geyser, Plasma Fists, Precipice Blades, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spotlight, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard.",
 		shortDesc: "Picks a random move.",
 		id: "metronome",
 		name: "Metronome",
 		pp: 10,
 		priority: 0,
 		flags: {},
-		noMetronome: ['afteryou', 'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'diamondstorm', 'dragonascent', 'endure', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lightofruin', 'matblock', 'mefirst', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'naturepower', 'originpulse', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spotlight', 'steameruption', 'struggle', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'vcreate', 'wideguard'],
+		noMetronome: ['afteryou', 'assist', 'banefulbunker', 'beakblast', 'behemothbash', 'behemothblade', 'belch', 'bestow', 'celebrate', 'chatter', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'diamondstorm', 'dragonascent', 'dynamaxcannon', 'endure', 'eternabeam', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lightofruin', 'matblock', 'mefirst', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'naturepower', 'originpulse', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spotlight', 'steameruption', 'struggle', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'vcreate', 'wideguard'],
 		onHit(target, source, effect) {
 			const moves = [];
 			for (const id in exports.BattleMovedex) {
@@ -12869,7 +12909,7 @@ let BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.dex.clampIntRange(Math.floor(target.hp / 2), 1);
+			return this.dex.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
@@ -12971,7 +13011,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 9,
 			onResidual(pokemon) {
-				this.damage(pokemon.maxhp / 4);
+				this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 		secondary: null,
@@ -13128,7 +13168,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Defense lowered by 2 stages. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Defense lowered by 2 stages. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from attacks. Contact: lowers Def by 2.",
 		id: "obstruct",
 		isViable: true,
@@ -13230,6 +13270,9 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onTryImmunity(target) {
+			return this.dex.getImmunity('trapped', target);
+		},
 		volatileStatus: 'octolock',
 		effect: {
 			onStart(pokemon, source) {
@@ -13401,8 +13444,10 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onHit(target, pokemon) {
-			let averagehp = Math.floor((target.hp + pokemon.hp) / 2) || 1;
-			target.sethp(averagehp);
+			const targetHP = target.getUndynamaxedHP();
+			let averagehp = Math.floor((targetHP + pokemon.hp) / 2) || 1;
+			let targetChange = targetHP - averagehp;
+			target.sethp(target.hp - targetChange);
 			this.add('-sethp', target, target.getHealth, '[from] move: Pain Split', '[silent]');
 			pokemon.sethp(averagehp);
 			this.add('-sethp', pokemon, pokemon.getHealth, '[from] move: Pain Split');
@@ -14290,7 +14335,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Prevents moves from affecting the user this turn.",
 		id: "protect",
 		isViable: true,
@@ -14367,6 +14412,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
 		onHit(target, source) {
+			if (target.volatiles['maxguard']) return false;
 			for (let i in target.boosts) {
 				// @ts-ignore
 				source.boosts[i] = target.boosts[i];
@@ -14789,19 +14835,10 @@ let BattleMovedex = {
 		onHit(target) {
 			if (target.side.active.length < 2) return false; // fails in singles
 			let action = this.willMove(target);
-			if (action) {
-				action.priority = -7.1;
-				this.cancelMove(target);
-				for (let i = this.queue.length - 1; i >= 0; i--) {
-					if (this.queue[i].choice === 'residual') {
-						this.queue.splice(i, 0, action);
-						break;
-					}
-				}
-				this.add('-activate', target, 'move: Quash');
-			} else {
-				return false;
-			}
+			if (!action) return false;
+
+			action.order = 201;
+			this.add('-activate', target, 'move: Quash');
 		},
 		secondary: null,
 		target: "normal",
@@ -14832,7 +14869,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from attacks with original or altered priority greater than 0 made by other Pokemon, including allies, during this turn. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+		desc: "The user and its party members are protected from attacks with original or altered priority greater than 0 made by other Pokemon, including allies, during this turn. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from priority attacks this turn.",
 		id: "quickguard",
 		name: "Quick Guard",
@@ -17903,7 +17940,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from moves. Contact: loses 1/8 max HP.",
 		id: "spikyshield",
 		isViable: true,
@@ -17939,13 +17976,13 @@ let BattleMovedex = {
 					}
 				}
 				if (move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
+					this.damage(source.baseMaxhp / 8, source, target);
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZPowered && move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
+					this.damage(source.baseMaxhp / 8, source, target);
 				}
 			},
 		},
@@ -18863,7 +18900,7 @@ let BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.dex.clampIntRange(Math.floor(target.hp / 2), 1);
+			return this.dex.clampIntRange(target.getUndynamaxedHP() / 2, 1);
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
@@ -19345,7 +19382,7 @@ let BattleMovedex = {
 			onEffectiveness(typeMod, target, type, move) {
 				if (move.type !== 'Fire') return;
 				if (!target || !target.volatiles['tarshot']) return;
-				return this.dex.getEffectiveness('Fire', target) + 1;
+				return typeMod + 1;
 			},
 			onResidualOrder: 21,
 			onEnd(pokemon) {
@@ -20005,11 +20042,10 @@ let BattleMovedex = {
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
-				if (pokemon.hasItem('heavydutyboots')) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -20060,7 +20096,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {mystery: 1},
 		onHit(target, pokemon) {
-			if (!pokemon.transformInto(target)) {
+			if (target.volatiles['maxguard'] || !pokemon.transformInto(target)) {
 				return false;
 			}
 		},
@@ -20963,7 +20999,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from moves made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+		desc: "The user and its party members are protected from moves made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from multi-target moves this turn.",
 		id: "wideguard",
 		name: "Wide Guard",

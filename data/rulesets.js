@@ -81,6 +81,38 @@ let BattleFormats = {
 		desc: "Makes sure the team is possible to obtain in-game.",
 		ruleset: ['Obtainable Moves', 'Obtainable Abilities', 'Obtainable Formes', 'Obtainable Misc'],
 		banlist: ['Unreleased', 'Nonexistent'],
+		// Mostly hardcoded in team-validator.ts
+		onValidateTeam(team, format) {
+			let kyuremCount = 0;
+			let necrozmaDMCount = 0;
+			let necrozmaDWCount = 0;
+			for (const set of team) {
+				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
+					if (kyuremCount > 0) {
+						return ['You cannot have more than one Kyurem-Black/Kyurem-White.'];
+					}
+					kyuremCount++;
+				}
+				if (set.species === 'Keldeo-Resolute') {
+					if (!set.moves.includes('secretsword')) {
+						return ['Keldeo-Resolute needs to have the move Secret Sword.'];
+					}
+				}
+				if (set.species === 'Necrozma-Dusk-Mane') {
+					if (necrozmaDMCount > 0) {
+						return ['You cannot have more than one Necrozma-Dusk-Mane.'];
+					}
+					necrozmaDMCount++;
+				}
+				if (set.species === 'Necrozma-Dawn-Wings') {
+					if (necrozmaDWCount > 0) {
+						return ['You cannot have more than one Necrozma-Dawn-Wings.'];
+					}
+					necrozmaDWCount++;
+				}
+			}
+			return [];
+		},
 	},
 	obtainablemoves: {
 		effectType: 'ValidatorRule',
@@ -103,33 +135,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Formes',
 		desc: "Makes sure in-battle formes only appear in-battle.",
-		// Mostly hardcoded in team-validator.ts
-		onValidateTeam(team) {
-			let kyuremCount = 0;
-			let necrozmaDMCount = 0;
-			let necrozmaDWCount = 0;
-			for (const set of team) {
-				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
-					if (kyuremCount > 0) {
-						return ['You cannot have more than one Kyurem-Black/Kyurem-White.'];
-					}
-					kyuremCount++;
-				}
-				if (set.species === 'Necrozma-Dusk-Mane') {
-					if (necrozmaDMCount > 0) {
-						return ['You cannot have more than one Necrozma-Dusk-Mane.'];
-					}
-					necrozmaDMCount++;
-				}
-				if (set.species === 'Necrozma-Dawn-Wings') {
-					if (necrozmaDWCount > 0) {
-						return ['You cannot have more than one Necrozma-Dawn-Wings.'];
-					}
-					necrozmaDWCount++;
-				}
-			}
-			return [];
-		},
+		// Hardcoded in team-validator.ts
 	},
 	obtainablemisc: {
 		effectType: 'ValidatorRule',
@@ -240,7 +246,7 @@ let BattleFormats = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+				this.add('poke', pokemon.side.id, details, this.gen < 8 && pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview() {
@@ -679,8 +685,8 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (let side of this.sides) {
-				side.canDynamax = false;
+			for (let pokemon of this.getAllPokemon()) {
+				pokemon.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
@@ -714,9 +720,9 @@ let BattleFormats = {
 			return -typeMod;
 		},
 	},
-	natdex: {
+	natdexrule: {
 		effectType: 'Rule',
-		name: 'NatDex',
+		name: 'NatDex Rule',
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
 			const unobtainables = [
@@ -734,16 +740,12 @@ let BattleFormats = {
 		},
 		onBegin() {
 			// if you have a mega/primal or z, you can't dynamax
-			for (const side of this.sides) {
-				let canMegaOrZ = false;
-				for (const pokemon of side.pokemon) {
-					const item = this.dex.getItem(pokemon.item);
-					if (item.megaStone || item.onPrimal || item.zMove) {
-						canMegaOrZ = true;
-						break;
-					}
+			for (const pokemon of this.getAllPokemon()) {
+				const item = pokemon.getItem();
+				// this.canMegaEvo check is for Rayquaza.
+				if (item.megaStone || this.canMegaEvo(pokemon) || item.onPrimal || item.zMove) {
+					pokemon.canDynamax = false;
 				}
-				if (canMegaOrZ) side.canDynamax = false;
 			}
 		},
 	},
@@ -759,7 +761,7 @@ let BattleFormats = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!move.isNonstandard && !restrictedMoves.includes(move.name)) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isMax) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);

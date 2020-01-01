@@ -44,9 +44,9 @@ let Formats = [
 	{
 		name: "[Gen 8] (National Dex) PSS Tier",
 		mod: 'gen8',
-		ruleset: ['Obtainable', 'Standard NatDex', 'Team Preview'],
-		banlist: ['Uber', 'Rusted Shield', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost","Hidden Power", "Return", "Frustration", "Pursuit",],
-		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense'],
+		ruleset: ['Obtainable', 'Standard NatDex', 'Team Preview', 'Dynamax Clause'],
+		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost", "Power Construct", "Cinderace + Libero", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge",],
+		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Meltan', 'Melmetal'],
 		onValidateSet(set){
 			if (set.item.includes(" Z")){
 				return [`${set.name || set.species} is holding a Z crystal. Z-moves are banned`]
@@ -75,7 +75,7 @@ let Formats = [
 		name: "[Gen 8] (National Dex) NCL Tier",
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard NatDex', 'Team Preview'],
-		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost","Hidden Power", "Return", "Frustration", "Pursuit"],
+		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost"],
 		unbanlist: ['Blaziken'],	
 	},
 	{
@@ -111,6 +111,31 @@ let Formats = [
 		banlist: ['Uber', 'Rusted Shield'],
 		unbanlist: ['Zamazenta'],
 		minSourceGen: 8,
+	},
+	{
+		name: "[Gen 7] Standard Draft League",
+		mod: 'gen7',
+		// timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
+		banlist: ['Power Construct'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
+	},
+	{
+		name: "[Gen 7] Standard Draft League (No Preview)",
+		mod: 'gen7',
+		// timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Obtainable', 'Standard'],
+		banlist: ['Power Construct'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
+	},
+	{
+		name: "[Gen 7] DS Draft League",
+		mod: 'gen7',
+		maxForcedLevel: 50,
+		timer: {starting: 59 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
+		banlist: ['Power Construct'],
+		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
 	},
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////

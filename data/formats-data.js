@@ -7416,54 +7416,54 @@ let BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	grookey: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	thwackey: {
-		unreleasedHidden: true,
+		
 		tier: "NFE",
 	},
 	rillaboom: {
 		randomBattleMoves: ["bulkup", "drumbeating", "highhorsepower", "substitute", "superpower", "uturn"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
 	scorbunny: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	raboot: {
-		unreleasedHidden: true,
+		
 		tier: "NFE",
 	},
 	cinderace: {
 		randomBattleMoves: ["courtchange", "gunkshot", "highjumpkick", "pyroball", "uturn", "zenheadbutt"],
-		unreleasedHidden: true,
+		
 		tier: "OU",
 		doublesTier: "New",
 	},
 	sobble: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	drizzile: {
-		unreleasedHidden: true,
+		
 		tier: "NFE",
 	},
 	inteleon: {
 		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "uturn"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
 	skwovet: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	greedent: {
 		randomBattleMoves: ["bodyslam", "earthquake", "gyroball", "payback", "swordsdance"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -7500,12 +7500,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	nickit: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	thievul: {
 		randomBattleMoves: ["darkpulse", "foulplay", "grassknot", "nastyplot", "partingshot", "psychic"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -7518,12 +7518,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	wooloo: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	dubwool: {
 		randomBattleMoves: ["bodypress", "cottonguard", "rest", "sleeptalk"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -7541,12 +7541,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	yamper: {
-		unreleasedHidden: true,
+		
 		tier: "LC",
 	},
 	boltund: {
 		randomBattleMoves: ["bulkup", "crunch", "firefang", "playrough", "psychicfangs", "thunderfang", "voltswitch"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -7784,25 +7784,25 @@ let BattleFormatsData = {
 	},
 	dracozolt: {
 		randomBattleMoves: ["aerialace", "boltbeak", "earthquake", "lowkick", "outrage"],
-		unreleasedHidden: true,
+		
 		tier: "OU",
 		doublesTier: "New",
 	},
 	arctozolt: {
 		randomBattleMoves: ["boltbeak", "bulldoze", "freezedry", "iciclecrash", "lowkick"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},
 	dracovish: {
 		randomBattleMoves: ["crunch", "fishiousrend", "icefang", "lowkick", "psychicfangs"],
-		unreleasedHidden: true,
+		
 		tier: "OU",
 		doublesTier: "New",
 	},
 	arctovish: {
 		randomBattleMoves: ["bodyslam", "fishiousrend", "freezedry", "iciclecrash", "psychicfangs"],
-		unreleasedHidden: true,
+		
 		tier: "UU",
 		doublesTier: "New",
 	},

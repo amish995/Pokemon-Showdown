@@ -15083,6 +15083,7 @@ let BattlePokedex = {
 		weightkg: 355,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		inheritsFrom: "zacian",
 	},
 	zamazenta: {
 		num: 889,
@@ -15110,6 +15111,7 @@ let BattlePokedex = {
 		weightkg: 785,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		inheritsFrom: "zamazenta",
 	},
 	eternatus: {
 		num: 890,

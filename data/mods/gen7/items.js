@@ -43,6 +43,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	armorfossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	audinite: {
 		inherit: true,
 		isNonstandard: null,
@@ -76,6 +80,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	burndrive: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	cameruptite: {
 		inherit: true,
 		isNonstandard: null,
@@ -85,6 +93,18 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	charizarditey: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	chilldrive: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	clawfossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	coverfossil: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -109,6 +129,14 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	domefossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dousedrive: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	dragongem: {
 		inherit: true,
 		isNonstandard: null,
@@ -117,6 +145,15 @@ let BattleItems = {
 	dragoniumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	dreamball: {
+		id: "dreamball",
+		name: "Dream Ball",
+		spritenum: 111,
+		num: 576,
+		gen: 5,
+		isPokeball: true,
+		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
 	},
 	eeviumz: {
 		inherit: true,
@@ -228,6 +265,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	helixfossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	heracronite: {
 		inherit: true,
 		isNonstandard: null,
@@ -266,6 +307,10 @@ let BattleItems = {
 	jabocaberry: {
 		inherit: true,
 		isUnreleased: undefined,
+	},
+	jawfossil: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	kangaskhanite: {
 		inherit: true,
@@ -373,6 +418,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	plumefossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	poisongem: {
 		inherit: true,
 		isNonstandard: null,
@@ -408,11 +457,19 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	rootfossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	rowapberry: {
 		inherit: true,
 		isUnreleased: undefined,
 	},
 	sablenite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	sailfossil: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -429,6 +486,14 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	sharpedonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shockdrive: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	skullfossil: {
 		inherit: true,
 		isNonstandard: null,
 	},

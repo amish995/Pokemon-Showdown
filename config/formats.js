@@ -44,16 +44,16 @@ let Formats = [
 	{
 		name: "[Gen 8] (National Dex) PSS Tier",
 		mod: 'gen8',
-		ruleset: ['Obtainable', 'Standard NatDex', 'Team Preview', 'Dynamax Clause', 'Z-Move Clause', '+Unreleased'],
+		ruleset: ['Obtainable', 'Standard NatDex', 'Dynamax Clause', 'Z-Move Clause', '+Unreleased'],
 		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost", "Power Construct", "Cinderace + Libero", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge",],
-		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Meltan', 'Melmetal'],
+		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Landorus-Base'],
 	},
 	{
 		name: "[Gen 8] (National Dex) NCL Tier",
 		mod: 'gen8',
-		ruleset: ['Obtainable', 'Standard NatDex', 'Team Preview'],
-		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel","Blaziken + Speed Boost"],
-		unbanlist: ['Blaziken'],	
+		ruleset: ['Obtainable', 'Standard NatDex', 'Dynamax Clause', 'Z-Move Clause', '+Unreleased'],
+		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base + Sheer Force", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel", "Blaziken + Speed Boost", "Greninja + Protean", "Greninja + Battle Bond", "Magnet Pull", "Shadow Tag", "Arena Trap", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge","Blastoise-Mega + Shell Smash"],
+		unbanlist: ['Blaziken', 'Kangaskhan-Mega', 'Landorus-Base'],	
 	},
 	{
 		name: "[Gen 8] Draft Format National Dex",
@@ -186,17 +186,6 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
 		banlist: ['UU', 'RUBL'],
-	},
-	{
-		name: "[Gen 8] RU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658495/">RU Metagame Discussion</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] UU'],
-		banlist: ['UU', 'RUBL'],
-		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] LC",
@@ -354,18 +343,6 @@ let Formats = [
 		gameType: 'doubles',
 		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
-	},
-	{
-		name: "[Gen 8] Doubles UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['[Gen 8] Doubles OU'],
-		banlist: ['DOU', 'DBL'],
-		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] VGC 2020",

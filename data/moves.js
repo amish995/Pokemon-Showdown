@@ -4745,7 +4745,6 @@ let BattleMovedex = {
 				let moveIndex = move ? target.moves.indexOf(move.id) : -1;
 				if (!move || move.isZ || move.isMax || target.volatiles['dynamax'] || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
-					delete target.volatiles['encore'];
 					return false;
 				}
 				this.effectData.move = move.id;
@@ -4761,8 +4760,7 @@ let BattleMovedex = {
 			onResidual(target) {
 				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
-					delete target.volatiles.encore;
-					this.add('-end', target, 'Encore');
+					target.removeVolatile('encore');
 				}
 			},
 			onEnd(target) {
@@ -10048,7 +10046,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from attacks. Contact: lowers Atk by 1.",
+		shortDesc: "Protects from damaging attacks. Contact: -1 Atk.",
 		id: "kingsshield",
 		isViable: true,
 		name: "King's Shield",
@@ -11189,7 +11187,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn. Fails unless it is the user's first turn on the field, if the user moves last this turn, or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from attacks. First turn out only.",
+		shortDesc: "Protects allies from damaging attacks. Turn 1 only.",
 		id: "matblock",
 		name: "Mat Block",
 		pp: 10,
@@ -11258,7 +11256,7 @@ let BattleMovedex = {
 		contestType: "Cool",
 	},
 	"maxdarkness": {
-		num: 766,
+		num: 772,
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
@@ -11688,7 +11686,7 @@ let BattleMovedex = {
 		contestType: "Cool",
 	},
 	"maxwyrmwind": {
-		num: 760,
+		num: 768,
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
@@ -13130,8 +13128,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Defense lowered by 2 stages. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from attacks. Contact: lowers Def by 2.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Defense lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Contact: -2 Def.",
 		id: "obstruct",
 		isViable: true,
 		name: "Obstruct",
@@ -19361,13 +19359,10 @@ let BattleMovedex = {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
 			onEffectiveness(typeMod, target, type, move) {
-				if (move.type !== 'Fire') return;
-				if (!target || !target.volatiles['tarshot']) return;
-				return typeMod + 1;
-			},
-			onResidualOrder: 21,
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Tar Shot');
+				if (!target) return;
+				if (move.type === 'Fire') {
+					return this.dex.getEffectiveness('Fire', target) + 1;
+				}
 			},
 		},
 		secondary: null,

@@ -223,7 +223,7 @@ export class Pokemon {
 
 		this.m = {};
 
-		const pokemonScripts = this.battle.dex.data.Scripts.pokemon;
+		const pokemonScripts = this.battle.format.pokemon || this.battle.dex.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
 		if (typeof set === 'string') set = {name: set};
@@ -593,11 +593,12 @@ export class Pokemon {
 		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
 	}
 
-	getUndynamaxedHP() {
+	getUndynamaxedHP(amount?: number) {
+		const hp = amount || this.hp;
 		if (this.volatiles['dynamax']) {
-			return Math.ceil(this.hp * this.baseMaxhp / this.maxhp);
+			return Math.ceil(hp * this.baseMaxhp / this.maxhp);
 		}
-		return this.hp;
+		return hp;
 	}
 
 	getMoveTargets(move: Move, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {

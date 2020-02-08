@@ -14420,6 +14420,7 @@ let BattlePokedex = {
 		prevo: "toxel",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
+		otherFormes: ["toxtricitylowkeygmax"],
 	},
 	toxtricitygmax: {
 		num: 849,
@@ -14429,12 +14430,25 @@ let BattlePokedex = {
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
-		// TODO
 		heightm: 0,
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Human-Like"],
 		inheritsFrom: "toxtricity",
+	},
+	toxtricitylowkeygmax: {
+		num: 849,
+		species: "Toxtricity-Low-Key-Gmax",
+		baseSpecies: "Toxtricity-Low-Key",
+		forme: "Gmax",
+		types: ["Electric", "Poison"],
+		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
+		abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
+		heightm: 0,
+		weightkg: 0,
+		color: "Purple",
+		eggGroups: ["Human-Like"],
+		inheritsFrom: "toxtricitylowkey",
 	},
 	sizzlipede: {
 		num: 850,
@@ -14749,6 +14763,7 @@ let BattlePokedex = {
 	alcremie: {
 		num: 869,
 		species: "Alcremie",
+		baseForme: "Vanilla Cream",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
@@ -14761,7 +14776,7 @@ let BattlePokedex = {
 		evoCondition: "spin while holding a Sweet",
 		eggGroups: ["Fairy", "Amorphous"],
 		otherFormes: ["alcremiegmax"],
-		otherForms: ["alcremierubycream", "alcremiematcha", "alcremiemint", "alcremielemon", "alcremiesalted", "alcremierubyswirl", "alcremiecaramel", "alcremierainbow"],
+		otherForms: ["alcremierubycream", "alcremiematchacream", "alcremiemintcream", "alcremielemoncream", "alcremiesaltedcream", "alcremierubyswirl", "alcremiecaramelswirl", "alcremierainbowswirl"],
 	},
 	alcremiegmax: {
 		num: 869,

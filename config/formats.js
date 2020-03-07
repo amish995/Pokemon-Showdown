@@ -56,6 +56,13 @@ let Formats = [
 		unbanlist: ['Blaziken', 'Kangaskhan-Mega', 'Landorus-Base', 'Darmanitan-Galar', 'Zygarde'],	
 	},
 	{
+		name: "[Gen 8] (National Dex) WWC Tier",
+		mod: 'gen8',
+		ruleset: ['Obtainable', 'Standard NatDex', 'Dynamax Clause', 'Z-Move Clause', '+Unreleased', 'Sleep Clause Mod'],
+		banlist: ['Uber', "Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base + Sheer Force", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel", "Blaziken + Speed Boost", "Greninja + Protean", "Magnet Pull", "Shadow Tag", "Arena Trap", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Magnitude", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge","Blastoise-Mega + Shell Smash", "Kyurem-Black + Dragon Dance"],
+		unbanlist: ['Blaziken', 'Kangaskhan-Mega', 'Landorus-Base', 'Darmanitan-Galar', 'Zygarde', 'Deoxys-Defense'],	
+	},
+	{
 		name: "[Gen 8] Draft Format National Dex",
 
 		mod: 'gen8',
@@ -112,6 +119,38 @@ let Formats = [
 		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
 		banlist: ['Power Construct'],
 		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
+	},
+	{
+		section: "Doubles Draft",
+	},
+	{
+		name: "[Gen 8] (National Dex) MDA Tier",
+		mod: 'gen8',
+		gameType: 'doubles',
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Standard Doubles', 'Standard NatDex', 'Z-Move Clause', '+Unreleased'],
+		banlist: [],
+		onBegin() {
+			// if you have a mega or z, you can't dynamax
+			for (const side of this.sides) {
+				let canMegaOrZ = false;
+				for (const pokemon of side.pokemon) {
+					const item = this.dex.getItem(pokemon.item);
+					if (item.megaStone || item.zMove) {
+						canMegaOrZ = true;
+						break;
+					}
+				}
+				if (canMegaOrZ) {
+					for (const pokemon of side.pokemon) {
+						pokemon.canDynamax = false;
+					}
+				}
+			}
+		},
 	},
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////

@@ -96,31 +96,6 @@ let Formats = [
 		minSourceGen: 8,
 	},
 	{
-		name: "[Gen 7] Standard Draft League",
-		mod: 'gen7',
-		// timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
-		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
-		banlist: ['Power Construct'],
-		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
-	},
-	{
-		name: "[Gen 7] Standard Draft League (No Preview)",
-		mod: 'gen7',
-		// timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
-		ruleset: ['Obtainable', 'Standard'],
-		banlist: ['Power Construct'],
-		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
-	},
-	{
-		name: "[Gen 7] DS Draft League",
-		mod: 'gen7',
-		maxForcedLevel: 50,
-		timer: {starting: 59 * 60, addPerTurn: 0, maxPerTurn: 99, maxFirstTurn: 99, grace: 99, timeoutAutoChoose: true, dcTimerBank: false},
-		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
-		banlist: ['Power Construct'],
-		unbanlist: ['Floette-Eternal', 'Light of Ruin'],
-	},
-	{
 		section: "Doubles Draft",
 	},
 	{

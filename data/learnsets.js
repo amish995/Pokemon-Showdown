@@ -73713,6 +73713,7 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["tackle", "thundershock", "charge"], "pokeball": "pokeball"},
+			{"generation": 8, "level": 10, "isHidden": true, "shiny": 1, "perfectIVs": 3, "moves": ["tackle", "thundershock", "charge"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -73773,6 +73774,7 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["powdersnow", "thundershock", "charge"], "pokeball": "pokeball"},
+			{"generation": 8, "level": 10, "isHidden":true, "shiny": 1, "perfectIVs": 3, "moves": ["powdersnow", "thundershock", "charge"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -73830,6 +73832,7 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["tackle", "watergun", "protect"], "pokeball": "pokeball"},
+			{"generation": 8, "level": 10, "isHidden": true, "shiny": 1, "perfectIVs": 3, "moves": ["tackle", "watergun", "protect"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -73882,6 +73885,7 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["powdersnow", "watergun", "protect"], "pokeball": "pokeball"},
+			{"generation": 8, "level": 10, "isHidden": true, "shiny": 1, "perfectIVs": 3, "moves": ["powdersnow", "watergun", "protect"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 	},

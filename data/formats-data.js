@@ -4188,7 +4188,7 @@ let BattleFormatsData = {
 	},
 	rillaboom: {
 		randomBattleMoves: ["bulkup", "drumbeating", "highhorsepower", "knockoff", "substitute", "uturn", "woodhammer"],
-		unreleasedHidden: true,
+
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -4216,7 +4216,7 @@ let BattleFormatsData = {
 	},
 	inteleon: {
 		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "uturn"],
-		unreleasedHidden: true,
+
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -4226,7 +4226,7 @@ let BattleFormatsData = {
 	},
 	greedent: {
 		randomBattleMoves: ["bodyslam", "earthquake", "firefang", "payback", "swordsdance"],
-		unreleasedHidden: true,
+
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
@@ -4266,7 +4266,7 @@ let BattleFormatsData = {
 	},
 	thievul: {
 		randomBattleMoves: ["darkpulse", "foulplay", "grassknot", "nastyplot", "partingshot", "psychic"],
-		unreleasedHidden: true,
+
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -4284,7 +4284,7 @@ let BattleFormatsData = {
 	},
 	dubwool: {
 		randomBattleMoves: ["bodypress", "cottonguard", "rest", "sleeptalk"],
-		unreleasedHidden: true,
+
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -4306,7 +4306,7 @@ let BattleFormatsData = {
 	},
 	boltund: {
 		randomBattleMoves: ["bulkup", "crunch", "firefang", "playrough", "psychicfangs", "thunderfang", "voltswitch"],
-		unreleasedHidden: true,
+
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
@@ -4533,13 +4533,13 @@ let BattleFormatsData = {
 	},
 	dracozolt: {
 		randomBattleMoves: ["aerialace", "boltbeak", "earthquake", "lowkick", "outrage"],
-		unreleasedHidden: true,
+
 		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	arctozolt: {
 		randomBattleMoves: ["bodyslam", "boltbeak", "freezedry", "iciclecrash", "lowkick"],
-		unreleasedHidden: true,
+
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
@@ -4551,7 +4551,7 @@ let BattleFormatsData = {
 	},
 	arctovish: {
 		randomBattleMoves: ["bodyslam", "fishiousrend", "freezedry", "iciclecrash", "psychicfangs"],
-		unreleasedHidden: true,
+
 		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},

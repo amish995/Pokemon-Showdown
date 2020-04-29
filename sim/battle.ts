@@ -130,6 +130,7 @@ export class Battle {
 	readonly maxMoveTable: {[k: string]: string};
 
 	readonly NOT_FAIL: '';
+	readonly HIT_SUBSTITUTE: 0;
 	readonly FAIL: false;
 	readonly SILENT_FAIL: null;
 
@@ -204,6 +205,7 @@ export class Battle {
 		this.hints = new Set();
 
 		this.NOT_FAIL = '';
+		this.HIT_SUBSTITUTE = 0;
 		this.FAIL = false;
 		this.SILENT_FAIL = null;
 
@@ -1031,11 +1033,11 @@ export class Battle {
 		}
 	}
 
-	getPokemon(id: string | Pokemon) {
-		if (typeof id !== 'string') id = id.id;
+	getPokemon(fullname: string | Pokemon) {
+		if (typeof fullname !== 'string') fullname = fullname.fullname;
 		for (const side of this.sides) {
 			for (const pokemon of side.pokemon) {
-				if (pokemon.id === id) return pokemon;
+				if (pokemon.fullname === fullname) return pokemon;
 			}
 		}
 		return null;
@@ -1622,6 +1624,10 @@ export class Battle {
 			throw new Error('Battle not started: A player has an empty team.');
 		}
 
+		if (this.debugMode) {
+			this.checkEVBalance();
+		}
+
 		this.residualEvent('TeamPreview');
 
 		this.queue.addChoice({choice: 'start'});
@@ -1636,6 +1642,20 @@ export class Battle {
 
 		// @ts-ignore - readonly
 		this.send = send;
+	}
+
+	checkEVBalance() {
+		let limitedEVs: boolean | null = null;
+		for (const side of this.sides) {
+			const sideLimitedEVs = !side.pokemon.some(
+				pokemon => Object.values(pokemon.set.evs).reduce((a, b) => a + b, 0) > 510
+			);
+			if (limitedEVs === null) {
+				limitedEVs = sideLimitedEVs;
+			} else if (limitedEVs !== sideLimitedEVs) {
+				this.add('bigerror', "Warning: One player isn't adhering to a 510 EV limit, and the other player is.");
+			}
+		}
 	}
 
 	boost(
@@ -1982,7 +2002,7 @@ export class Battle {
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			}) as ActiveMove;
+			}) as unknown as ActiveMove;
 			move.hit = 0;
 		}
 
@@ -2338,7 +2358,8 @@ export class Battle {
 
 	faintMessages(lastFirst = false) {
 		if (this.ended) return;
-		if (!this.faintQueue.length) return false;
+		const length = this.faintQueue.length;
+		if (!length) return false;
 		if (lastFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
@@ -2406,6 +2427,10 @@ export class Battle {
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft) {
 			this.win(this.sides[3]);
 			return true;
+		}
+
+		if (faintData) {
+			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
 	}
@@ -2475,7 +2500,7 @@ export class Battle {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.dex.getEffectByID(pokemon.species.id), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -3019,10 +3044,6 @@ export class Battle {
 		throw new UnimplementedError('canZMove');
 	}
 
-	canDynamax(pokemon: Pokemon, skipChecks?: boolean): DynamaxOptions | undefined {
-		throw new UnimplementedError('canDynamax');
-	}
-
 	forceSwitch(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
@@ -3091,7 +3112,7 @@ export class Battle {
 
 	moveHit(
 		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
-		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
+		moveData?: HitEffect,
 		isSecondary?: boolean, isSelf?: boolean
 	): number | undefined | false {
 		throw new UnimplementedError('moveHit');

@@ -326,7 +326,7 @@ export class TeamValidator {
 		}
 
 		let species = dex.getSpecies(set.species);
-		set.species = Dex.getForme(set.species);
+		set.species = species.name;
 		set.name = dex.getName(set.name);
 		let item = dex.getItem(Dex.getString(set.item));
 		set.item = item.name;
@@ -817,9 +817,7 @@ export class TeamValidator {
 			if (dex.gen > 1 && !species.gender) {
 				// Gen 2 gender is calculated from the Atk DV.
 				// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
-				let genderThreshold = species.genderRatio.F * 16;
-				if (genderThreshold === 4) genderThreshold = 5;
-				if (genderThreshold === 8) genderThreshold = 7;
+				const genderThreshold = species.genderRatio.F * 16;
 
 				const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
 				if (set.gender && set.gender !== expectedGender) {
@@ -866,8 +864,17 @@ export class TeamValidator {
 			}
 		} else { // EVs
 			for (const stat in set.evs) {
-				if (set.evs[stat as 'hp'] > 255) {
+				if (set.evs[stat as StatName] > 255) {
 					problems.push(`${name} has more than 255 EVs in ${statTable[stat as 'hp']}.`);
+				}
+			}
+			if (dex.gen <= 2) {
+				if (set.evs.spa !== set.evs.spd) {
+					if (dex.gen === 2) {
+						problems.push(`${name} has different SpA and SpD EVs, which is not possible in Gen 2.`);
+					} else {
+						set.evs.spd = set.evs.spa;
+					}
 				}
 			}
 		}
@@ -1012,10 +1019,13 @@ export class TeamValidator {
 		let eggGroups = species.eggGroups;
 		if (species.id === 'nidoqueen' || species.id === 'nidorina') {
 			eggGroups = dex.getSpecies('nidoranf').eggGroups;
+		} else if (dex !== this.dex) {
+			// Gen 1 tradeback; grab the egg groups from Gen 2
+			eggGroups = dex.getSpecies(species.id).eggGroups;
 		}
 		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.getSpecies(species.evos[0]).eggGroups;
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
-			throw new Error(`${species.name} has no egg groups`);
+			throw new Error(`${species.name} has no egg groups for source ${source}`);
 		}
 		// no chainbreeding necessary if the father can be Smeargle
 		if (!getAll && eggGroups.includes('Field')) return true;
@@ -1258,6 +1268,11 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
+		banReason = ruleTable.check('pokemontag:allpokemon');
+		if (banReason) {
+			return `${species.name} is not in the list of allowed pokemon.`;
+		}
+
 		// obtainability
 		if (tierSpecies.isNonstandard) {
 			banReason = ruleTable.check('pokemontag:' + toID(tierSpecies.isNonstandard));
@@ -1281,11 +1296,6 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allpokemon');
-		if (banReason) {
-			return `${species.name} is not in the list of allowed pokemon.`;
-		}
-
 		return null;
 	}
 
@@ -1300,6 +1310,11 @@ export class TeamValidator {
 			return `${set.name}'s item ${item.name} is ${banReason}.`;
 		}
 		if (banReason === '') return null;
+
+		banReason = ruleTable.check('pokemontag:allitems');
+		if (banReason) {
+			return `${set.name}'s item ${item.name} is not in the list of allowed items.`;
+		}
 
 		// obtainability
 		if (item.isNonstandard) {
@@ -1324,11 +1339,6 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allitems');
-		if (banReason) {
-			return `${set.name}'s item ${item.name} is not in the list of allowed items.`;
-		}
-
 		return null;
 	}
 
@@ -1343,6 +1353,15 @@ export class TeamValidator {
 			return `${set.name}'s move ${move.name} is ${banReason}.`;
 		}
 		if (banReason === '') return null;
+
+		if (ruleTable.isBanned('nonexistent') && typeof move.isMax === 'string') {
+			return `${set.name}'s move ${move.name} is not obtainable without Gigantamaxing ${move.isMax}.`;
+		}
+
+		banReason = ruleTable.check('pokemontag:allmoves');
+		if (banReason) {
+			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
+		}
 
 		// obtainability
 		if (move.isNonstandard) {
@@ -1367,11 +1386,6 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allmoves');
-		if (banReason) {
-			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
-		}
-
 		return null;
 	}
 
@@ -1386,6 +1400,11 @@ export class TeamValidator {
 			return `${set.name}'s ability ${ability.name} is ${banReason}.`;
 		}
 		if (banReason === '') return null;
+
+		banReason = ruleTable.check('pokemontag:allabilities');
+		if (banReason) {
+			return `${set.name}'s ability ${ability.name} is not in the list of allowed abilities.`;
+		}
 
 		// obtainability
 		if (ability.isNonstandard) {
@@ -1403,11 +1422,6 @@ export class TeamValidator {
 				return `${set.name}'s ability ${ability.name} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
-		}
-
-		banReason = ruleTable.check('pokemontag:allabilities');
-		if (banReason) {
-			return `${set.name}'s ability ${ability.name} is not in the list of allowed abilities.`;
 		}
 
 		return null;
@@ -1709,15 +1723,15 @@ export class TeamValidator {
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
 			const lsetData = dex.getLearnsetData(species.id);
 			if (!lsetData.learnset) {
-				if (species.baseSpecies !== species.name) {
+				if ((species.changesFrom || species.baseSpecies) !== species.name) {
 					// forme without its own learnset
-					species = dex.getSpecies(species.baseSpecies);
+					species = dex.getSpecies(species.changesFrom || species.baseSpecies);
 					// warning: formes with their own learnset, like Wormadam, should NOT
 					// inherit from their base forme unless they're freely switchable
 					continue;
 				}
 				// should never happen
-				break;
+				throw new Error(`Species with no learnset data: ${species.id}`);
 			}
 			const checkingPrevo = species.baseSpecies !== s.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
@@ -1936,9 +1950,9 @@ export class TeamValidator {
 			species = this.dex.getSpecies(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
-		} else if (species.inheritsFrom) {
+		} else if (species.changesFrom) {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
-			return this.dex.getSpecies(species.inheritsFrom);
+			return this.dex.getSpecies(species.changesFrom);
 		}
 		return null;
 	}

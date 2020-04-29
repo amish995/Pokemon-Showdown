@@ -86,7 +86,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		const currentGroup = room.getAuth({id: userid, group: (Users.usergroups[userid] || ' ').charAt(0)});
+		const currentGroup = room.auth[userid] || Config.groupsranking[0];
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -106,7 +106,7 @@ export const commands: ChatCommands = {
 		}
 		if (!user.can('makeroom')) {
 			if (currentGroup !== ' ' && !user.can(`room${Config.groups[currentGroup]?.id || 'voice'}`, null, room)) {
-				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${(Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group")}.`);
+				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${Config.groups[currentGroup]?.name || currentGroup}.`);
 			}
 			if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
 				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${Config.groups[nextGroup].name}.`);
@@ -553,7 +553,7 @@ export const commands: ChatCommands = {
 		const reason = (target ? ` (${target})` : ``);
 		this.addModAction(`${name} was banned from ${room.title} by ${user.name}.${reason}`);
 
-		const affected = Punishments.roomBan(room, targetUser, null, target);
+		const affected = Punishments.roomBan(room, targetUser, null, null, target);
 
 		if (!room.isPrivate && room.chatRoomData) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -1087,7 +1087,7 @@ export const commands: ChatCommands = {
 		}
 		if (!cmd.startsWith('global')) {
 			let groupid = Config.groups[nextGroup].id;
-			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
+			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth' as ID;
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
 			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
 			return this.errorReply(`Did you mean "/room${groupid}" or "/global${groupid}"?`);

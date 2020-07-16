@@ -1,18 +1,4 @@
 export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
-	charizard: {
-		inherit: true,
-		otherFormes: ["charizardmegax", "charizardmegay"],
-	},
-	butterfree: {
-		inherit: true,
-		otherFormes: undefined,
-	},
-	pikachu: {
-		inherit: true,
-		otherFormes: [
-			"pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner", "pikachustarter",
-		],
-	},
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},
@@ -41,22 +27,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Static"},
 	},
-	meowth: {
-		inherit: true,
-		otherFormes: ["meowthalola"],
-	},
-	machamp: {
-		inherit: true,
-		otherFormes: undefined,
-	},
-	gengar: {
-		inherit: true,
-		otherFormes: ['gengarmega'],
-	},
-	kingler: {
-		inherit: true,
-		otherFormes: undefined,
-	},
 	koffing: {
 		inherit: true,
 		abilities: {0: "Levitate"},
@@ -64,18 +34,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	weezing: {
 		inherit: true,
 		abilities: {0: "Levitate"},
-	},
-	lapras: {
-		inherit: true,
-		otherFormes: undefined,
-	},
-	eevee: {
-		inherit: true,
-		otherFormes: ['eeveestarter'],
-	},
-	snorlax: {
-		inherit: true,
-		otherFormes: undefined,
 	},
 	ralts: {
 		inherit: true,
@@ -101,6 +59,11 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		eggGroups: ["Bug"],
 	},
+	magnezone: {
+		inherit: true,
+		evoType: "levelExtra",
+		evoCondition: "in a special magnetic field",
+	},
 	leafeon: {
 		inherit: true,
 		evoType: "levelExtra",
@@ -118,10 +81,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	heatran: {
 		inherit: true,
 		abilities: {0: "Flash Fire"},
-	},
-	garbodor: {
-		inherit: true,
-		otherFormes: undefined,
 	},
 	aegislash: {
 		inherit: true,
@@ -172,6 +131,14 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		evoType: "levelExtra",
 		evoCondition: "near a special magnetic field",
 	},
+	lycanroc: {
+		inherit: true,
+		evoCondition: "in Pokemon Sun/Ultra Sun",
+	},
+	lycanrocmidnight: {
+		inherit: true,
+		evoCondition: "in Pokemon Moon/Ultra Moon",
+	},
 	tapukoko: {
 		inherit: true,
 		abilities: {0: "Electric Surge"},
@@ -187,9 +154,5 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	tapufini: {
 		inherit: true,
 		abilities: {0: "Misty Surge"},
-	},
-	melmetal: {
-		inherit: true,
-		otherFormes: undefined,
 	},
 };

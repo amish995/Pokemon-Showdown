@@ -40,7 +40,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 
 			// Gen 2 caps stats at 999 and min is 1.
-			stat = this.battle.dex.clampIntRange(stat, 1, 999);
+			stat = this.battle.clampIntRange(stat, 1, 999);
 			if (fastReturn) return stat;
 
 			// Screens
@@ -136,7 +136,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
-		if (!move.selfSwitch && target && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
+		if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	tryMoveHit(target, pokemon, move) {
 		const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
@@ -427,19 +427,20 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (!isSecondary && moveData.self.boosts) this.random(100);
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
-		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+		// Secondary effects don't happen if the target faints from the attack
+		if (target?.hp && moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
 			for (const secondary of moveData.secondaries) {
 				// We check here whether to negate the probable secondary status if it's burn or freeze.
 				// In the game, this is checked and if true, the random number generator is not called.
 				// That means that a move that does not share the type of the target can status it.
 				// This means tri-attack can burn fire-types and freeze ice-types.
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
-				if (secondary.status && ['brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type)) {
+				if (secondary.status && ['brn', 'frz'].includes(secondary.status) && target.hasType(move.type)) {
 					this.debug('Target immune to [' + secondary.status + ']');
 					continue;
 				}
 				// A sleeping or frozen target cannot be flinched in Gen 2; King's Rock is exempt
-				if (secondary.volatileStatus === 'flinch' && target && ['slp', 'frz'].includes(target.status) && !secondary.kingsrock) {
+				if (secondary.volatileStatus === 'flinch' && ['slp', 'frz'].includes(target.status) && !secondary.kingsrock) {
 					this.debug('Cannot flinch a sleeping or frozen target');
 					continue;
 				}
@@ -526,11 +527,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
-		critRatio = this.dex.clampIntRange(critRatio, 0, 5);
+		critRatio = this.clampIntRange(critRatio, 0, 5);
 		const critMult = [0, 16, 8, 4, 3, 2];
 		let isCrit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
@@ -558,7 +559,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = this.dex.clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		let level = pokemon.level;
@@ -636,13 +637,13 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (attack >= 1024 || defense >= 1024) {
 				this.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
 			}
-			attack = this.dex.clampIntRange(Math.floor(attack / 4) % 256, 1);
-			defense = this.dex.clampIntRange(Math.floor(defense / 4) % 256, 1);
+			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
 		// Self destruct moves halve defense at this point.
 		if (move.selfdestruct && defType === 'def') {
-			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		// Let's go with the calculation now that we have what we need.
@@ -653,7 +654,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.dex.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// Weather modifiers

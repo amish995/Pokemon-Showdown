@@ -201,7 +201,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	leechlife: {
 		inherit: true,
 		basePower: 20,
-		isViable: false,
 		pp: 15,
 	},
 	lightscreen: {
@@ -337,7 +336,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			onTryMove(pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
-					this.damage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
+					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
 			},

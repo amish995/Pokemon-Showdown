@@ -289,8 +289,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	explosion: {
 		inherit: true,
 		desc: "The user faints after using this move. The target's Defense is halved during damage calculation.",
-		shortDesc: "The user faints.",
-		basePower: 250,
 		noSketch: true,
 	},
 	fissure: {
@@ -385,7 +383,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (target.runImmunity('Fighting')) {
 				const damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get High Jump Kick recoil");
-				this.damage(this.dex.clampIntRange(damage / 8, 1), source, source, move);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -405,7 +403,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (target.runImmunity('Fighting')) {
 				const damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get Jump Kick recoil");
-				this.damage(this.dex.clampIntRange(damage / 8, 1), source, source, move);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -427,7 +425,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					return;
 				}
-				const toLeech = this.dex.clampIntRange(pokemon.maxhp / 8, 1);
+				const toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
 				const damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
 					this.heal(damage, leecher, pokemon);
@@ -483,7 +481,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		desc: "A random move is selected for use, other than Counter, Destiny Bond, Detect, Endure, Metronome, Mimic, Mirror Coat, Protect, Sketch, Sleep Talk, Struggle, or Thief.",
-		noMetronome: ['counter', 'destinybond', 'detect', 'endure', 'metronome', 'mimic', 'mirrorcoat', 'protect', 'sketch', 'sleeptalk', 'struggle', 'thief'],
+		noMetronome: [
+			"Counter", "Destiny Bond", "Detect", "Endure", "Metronome", "Mimic", "Mirror Coat", "Protect", "Sketch", "Sleep Talk", "Struggle", "Thief",
+		],
 		noSketch: true,
 	},
 	mimic: {
@@ -738,8 +738,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	selfdestruct: {
 		inherit: true,
 		desc: "The user faints after using this move. The target's Defense is halved during damage calculation.",
-		shortDesc: "The user faints.",
-		basePower: 200,
 		noSketch: true,
 	},
 	sketch: {

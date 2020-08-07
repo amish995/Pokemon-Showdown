@@ -58,7 +58,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		name: "[Gen 8] (National Dex) WWC Tier",
 		mod: 'gen8',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', '+Unreleased'],
-		banlist: ["Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Power Construct", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel", "Blaziken + Speed Boost", "Greninja + Protean", "Blastoise-Mega + Shell Smash", "Kyurem-Black + Dragon Dance", "Alakazam-Mega + Nasty Plot", "Deoxys-Speed + Nasty Plot"],
+		banlist: ["Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Power Construct", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel", "Blaziken + Speed Boost", "Greninja + Protean", "Blastoise-Mega + Shell Smash", "Kyurem-Black", "Alakazam-Mega + Nasty Plot", "Deoxys-Speed + Nasty Plot"],
 		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Landorus-Base', 'Kyurem-Black', 'Melmetal'],	
 	},
 	{

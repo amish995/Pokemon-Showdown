@@ -6091,6 +6091,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			haze: ["7L40", "7V", "6L40", "5L51", "4L45", "3L56"],
 			heatwave: ["7T", "6T", "5T", "4T", "4S0"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
+			hurricane: ["8M"],
 			hyperbeam: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			leechlife: ["7M", "7L35", "7V", "6L1", "5L1", "4L1", "3L1"],
 			meanlook: ["7L32", "7V", "6L32", "5L33", "4L33", "3L42"],

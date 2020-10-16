@@ -1,6 +1,7 @@
 /config/*
 !/config/formats.ts
 /logs/*
+/test/modlogs
 /node_modules
 /eslint-cache
 /server/chat-plugins/private
@@ -16,6 +17,7 @@ databases/*.db*
 # Typescript build artifacts
 .*-dist/
 tools/set-import/importer.js
+tools/modlog/converter.js
 
 # visual studio live share
 .vs

@@ -116,6 +116,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 1,
 		category: "Physical",
 		isNonstandard: "Past",
+		name: "Acid Downpour",
+		pp: 1,
+		priority: 0,
+		flags: {},
 		isZ: "poisoniumz",
 		secondary: null,
 		target: "normal",
@@ -752,6 +756,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		name: "Aurora Veil",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		sideCondition: 'auroraveil',
 		onTryHitSide() {
 			if (!this.field.isWeather('hail')) return false;
 		},
@@ -994,6 +1003,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
+		isNonstandard: "Past",
+		name: "Beak Blast",
+		pp: 15,
+		priority: -3,
+		flags: {bullet: 1, protect: 1},
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('beakblast');
 		},
@@ -2264,6 +2278,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		name: "Coil",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		boosts: {
 			atk: 1,
 			def: 1,
 			accuracy: 1,
@@ -6131,25 +6150,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		condition: {
-			noCopy: true,
-			onStart(target, source, effect) {
-				this.effectData.layers = 1;
-				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
-					this.add('-start', target, 'move: G-Max Chi Strike');
-				}
-			},
-			onRestart(target, source, effect) {
-				if (this.effectData.layers >= 3) return false;
-				this.effectData.layers++;
-				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
-					this.add('-start', target, 'move: G-Max Chi Strike');
-				}
-			},
-			onModifyCritRatio(critRatio) {
-				return critRatio + this.effectData.layers;
-			},
-		},
-		effect: {
 			noCopy: true,
 			onStart(target, source, effect) {
 				this.effectData.layers = 1;

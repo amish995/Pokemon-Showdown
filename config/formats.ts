@@ -24,27 +24,27 @@ export const Formats: FormatList = [
 		section: "Singles Draft"
 	},
 	{
-		name: "[Gen 8] (National Dex) PSS Tier",
+		name: "[Gen 8] PSS Tier",
 		mod: 'gen8',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', '+Unreleased'],
 		// ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
-		banlist: ["Greninja + Protean", "Greninja + Battle Bond", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge", "Tail Glow", "Heart Swap", "Spotlight", "Psycho Boost", "Blaziken-Mega + Swords Dance", "Blaziken-Mega + Bulk Up", "Blaziken-Mega + Power-Up Punch", "Blaziken-Mega + Hone Claws", "Blaziken-Mega + Agility", "Blaziken-Mega + Curse", "Blaziken-Mega + Work Up", "Blaziken-Mega + Flame Charge", "Alakazam-Mega + Nasty Plot", "Blastoise-Mega + Shell Smash", "Kangaskhan-Mega + Seismic Toss", "Zygarde-Base + Power Construct"],
+		banlist: ["Greninja + Protean", "Greninja + Battle Bond", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge", "Tail Glow", "Heart Swap", "Spotlight", "Psycho Boost", "Blaziken-Mega + Swords Dance", "Blaziken-Mega + Bulk Up", "Blaziken-Mega + Power-Up Punch", "Blaziken-Mega + Hone Claws", "Blaziken-Mega + Agility", "Blaziken-Mega + Curse", "Blaziken-Mega + Work Up", "Blaziken-Mega + Flame Charge", "Alakazam-Mega + Nasty Plot", "Blastoise-Mega + Shell Smash", "Kangaskhan-Mega + Seismic Toss", "Zygarde-Base + Power Construct", "Glalie-Mega + Moody", "Glalitite + Moody"],
 		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Landorus-Base', 'Kyurem-Black', 'Melmetal'],
 	},
 	{
-		name: "[Gen 8] (National Dex) NCL Tier",
+		name: "[Gen 8] NCL Tier",
 		mod: 'gen8',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', '+Unreleased'],
 		banlist: ["Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Blaziken + Speed Boost", "Greninja + Protean", "Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge","Tail Glow", "Heart Swap", "Spotlight", "Psycho Boost","Blastoise-Mega + Shell Smash", 'Latios-Mega', 'Latias-Mega', 'Kyurem-Black + Dragon Dance'],
 		unbanlist: ['Floette-Eternal', 'Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Landorus-Base', 'Kyurem-Black', 'Melmetal'],	
 	},
-	{
-		name: "[Gen 8] (National Dex) WWC Tier",
-		mod: 'gen8',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', '+Unreleased'],
-		banlist: ["Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Power Construct", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel", "Blaziken + Speed Boost", "Greninja + Protean", "Blastoise-Mega + Shell Smash", "Kyurem-Black", "Alakazam-Mega + Nasty Plot", "Deoxys-Speed + Nasty Plot"],
-		unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Landorus-Base', 'Melmetal'],	
-	},
+	// {
+	// 	name: "[Gen 8] (National Dex) WWC Tier",
+	// 	mod: 'gen8',
+	// 	ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', '+Unreleased'],
+	// 	banlist: ["Gengar-Mega", "Kangaskhan-Mega + Seismic Toss", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Power Construct", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel", "Blaziken + Speed Boost", "Greninja + Protean", "Blastoise-Mega + Shell Smash", "Kyurem-Black", "Alakazam-Mega + Nasty Plot", "Deoxys-Speed + Nasty Plot"],
+	// 	unbanlist: ['Blaziken', 'Deoxys-Speed', 'Deoxys-Defense', 'Landorus-Base', 'Melmetal'],	
+	// },
 	{
 		name: "[Gen 8] Draft Format National Dex",
 	
@@ -70,38 +70,38 @@ export const Formats: FormatList = [
 			}
 		},
 	},
-	{
-		section: "Doubles Draft",
-	},
-	{
-		name: "[Gen 8] (National Dex) MDA Tier",
-		mod: 'gen8',
-		gameType: 'doubles',
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Standard Doubles', 'Standard NatDex', 'Z-Move Clause', '+Unreleased', 'Item Clause'],
-		banlist: ["Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge"],
-		onBegin() {
-			// if you have a mega or z, you can't dynamax
-			for (const side of this.sides) {
-				let canMegaOrZ = false;
-				for (const pokemon of side.pokemon) {
-					const item = this.dex.getItem(pokemon.item);
-					if (item.megaStone || item.zMove) {
-						canMegaOrZ = true;
-						break;
-					}
-				}
-				if (canMegaOrZ) {
-					for (const pokemon of side.pokemon) {
-						pokemon.canDynamax = false;
-					}
-				}
-			}
-		},
-	},
+	// {
+	// 	section: "Doubles Draft",
+	// },
+	// {
+	// 	name: "[Gen 8] (National Dex) MDA Tier",
+	// 	mod: 'gen8',
+	// 	gameType: 'doubles',
+	// 	teamLength: {
+	// 		validate: [4, 6],
+	// 		battle: 4,
+	// 	},
+	// 	ruleset: ['Standard Doubles', 'Standard NatDex', 'Z-Move Clause', '+Unreleased', 'Item Clause'],
+	// 	banlist: ["Karate Chop", "Double Slap", "Comet Punch", "Razor Wind", "Jump Kick", "Rolling Kick", "Twineedle", "Sonic Boom", "Dragon Rage", "Meditate", "Rage", "Barrier", "Bide", "Mirror Move", "Egg Bomb", "Bone Club", "Clamp", "Spike Cannon", "Constrict", "Kinesis", "Barrage", "Bubble", "Dizzy Punch", "Flash", "Psywave", "Sharpen", "Spider Web", "Nightmare", "Feint Attack", "Foresight", "Return", "Frustration", "Magnitude", "Pursuit", "Hidden Power", "Smelling Salts", "Assist", "Refresh", "Snatch", "Secret Power", "Camouflage", "Mud Sport", "Ice Ball", "Needle Arm", "Odor Sleuth", "Silver Wind", "Grass Whistle", "Signal Beam", "Sky Uppercut", "Water Sport", "Miracle Eye", "Wake-Up Slap", "Natural Gift", "Embargo", "Trump Card", "Heal Block", "Wring Out", "Lucky Chant", "Me First", "Punishment", "Mud Bomb", "Mirror Shot", "Rock Climb", "Magnet Bomb", "Captivate", "Heal Order", "Ominous Wind", "Telekinesis", "Flame Burst", "Synchronoise", "Chip Away", "Sky Drop", "Bestow", "Heart Stamp", "Steamroller", "Rototiller", "Ion Deluge"],
+	// 	onBegin() {
+	// 		// if you have a mega or z, you can't dynamax
+	// 		for (const side of this.sides) {
+	// 			let canMegaOrZ = false;
+	// 			for (const pokemon of side.pokemon) {
+	// 				const item = this.dex.getItem(pokemon.item);
+	// 				if (item.megaStone || item.zMove) {
+	// 					canMegaOrZ = true;
+	// 					break;
+	// 				}
+	// 			}
+	// 			if (canMegaOrZ) {
+	// 				for (const pokemon of side.pokemon) {
+	// 					pokemon.canDynamax = false;
+	// 				}
+	// 			}
+	// 		}
+	// 	},
+	// },
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////

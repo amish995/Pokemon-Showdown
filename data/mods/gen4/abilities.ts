@@ -1,4 +1,9 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
+	airlock: {
+		inherit: true,
+		onSwitchIn() {},
+		onStart() {},
+	},
 	angerpoint: {
 		inherit: true,
 		onAfterSubDamage(damage, target, source, move) {
@@ -21,6 +26,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Blaze",
 		rating: 2,
 		num: 66,
+	},
+	cloudnine: {
+		inherit: true,
+		onSwitchIn() {},
+		onStart() {},
 	},
 	colorchange: {
 		inherit: true,
@@ -46,7 +56,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	effectspore: {
 		inherit: true,
-		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		onDamagingHit(damage, target, source, move) {
 			if (damage && move.flags['contact'] && !source.status) {
 				const r = this.random(100);
@@ -331,17 +340,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	static: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (damage && move.flags['contact']) {
-				if (this.randomChance(3, 10)) {
-					source.trySetStatus('par', target);
-				}
-			}
-		},
-	},
-	static: {
-		inherit: true,
-		desc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		onDamagingHit(damage, target, source, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(3, 10)) {

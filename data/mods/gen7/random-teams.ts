@@ -9,11 +9,12 @@ export class RandomGen7Teams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 	}
+
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false, isDoubles = false): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
-		if (species.battleOnly && typeof species.battleOnly === 'string') {
+		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
 		}
@@ -259,17 +260,14 @@ export class RandomGen7Teams extends RandomTeams {
 				case 'suckerpunch':
 					if (counter.damagingMoves.length < 2 || hasMove['glare'] || !hasType['Dark'] && counter['Dark'] > 1) rejected = true;
 					break;
-				case 'dragonclaw':
-					if (hasMove['dragontail'] || hasMove['outrage']) rejected = true;
-					break;
 				case 'dracometeor':
-					if (hasMove['swordsdance'] || counter.setupType === 'Physical' && counter['Dragon'] > 1) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor'] || hasMove['outrage'] || hasMove['dragontail'] && !counter.setupType) rejected = true;
 					break;
 				case 'outrage':
-					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
+					if (hasMove['dragonclaw'] || hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
 					if (hasMove['clangingscales'] && !teamDetails.zMove) rejected = true;
 					break;
 				case 'thunderbolt':
@@ -313,9 +311,6 @@ export class RandomGen7Teams extends RandomTeams {
 					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
 					if (hasMove['mindblown'] && !teamDetails.zMove) rejected = true;
 					break;
-				case 'heatwave':
-					if (isDoubles && hasMove['fireblast']) rejected = true;
-					break;
 				case 'lavaplume':
 					if (hasMove['firepunch'] || hasMove['fireblast'] && (counter.setupType || !!counter['speedsetup'])) rejected = true;
 					break;
@@ -326,7 +321,7 @@ export class RandomGen7Teams extends RandomTeams {
 					if (hasMove['bravebird'] || hasMove['airslash'] && !!counter.Status) rejected = true;
 					break;
 				case 'hex':
-					if (!hasMove['willowisp']) rejected = true;
+					if (!hasMove['thunderwave'] && !hasMove['willowisp']) rejected = true;
 					break;
 				case 'shadowball':
 					if (hasMove['darkpulse'] || hasMove['hex'] && hasMove['willowisp']) rejected = true;
@@ -396,7 +391,7 @@ export class RandomGen7Teams extends RandomTeams {
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
 					break;
 				case 'quickattack':
-					if (hasType['Normal'] && (!counter.stab || counter['Normal'] > 2)) rejected = true;
+					if (!!counter['recovery'] || hasType['Normal'] && (!counter.stab || counter['Normal'] > 2)) rejected = true;
 					if (hasMove['feint'] || hasType['Rock'] && !!counter.Status) rejected = true;
 					break;
 				case 'weatherball':
@@ -484,7 +479,7 @@ export class RandomGen7Teams extends RandomTeams {
 					break;
 				case 'substitute':
 					if (hasMove['dracometeor'] || hasMove['leafstorm'] && !hasAbility['Contrary']) rejected = true;
-					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
+					if (hasMove['encore'] || hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
 					if (movePool.includes('copycat')) rejected = true;
 					break;
 				case 'powersplit':
@@ -537,12 +532,13 @@ export class RandomGen7Teams extends RandomTeams {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					((movePool.includes('recover') || movePool.includes('roost') || movePool.includes('slackoff') || movePool.includes('softboiled')) &&
 						!!counter.Status && !counter.setupType && !hasMove['healingwish'] && !hasMove['trick'] && !hasMove['trickroom']) ||
-					(movePool.includes('milkdrink') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
+					(movePool.includes('milkdrink') || movePool.includes('shoreup') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
+					(isLead && movePool.includes('stealthrock') && !!counter.Status && !counter.setupType && !counter['speedsetup'] && !hasMove['substitute']) ||
 					(species.requiredMove && movePool.includes(toID(species.requiredMove)))
 				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
-						if (move.category === 'Status' || !hasType[move.type] || move.basePower < 40 && !move.multihit) {
+						if (move.category === 'Status' || !hasType[move.type] || move.basePower && move.basePower < 40 && !move.multihit) {
 							rejected = true;
 						}
 					}
@@ -1293,8 +1289,8 @@ export class RandomGen7Teams extends RandomTeams {
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level ? setData.set.level : tier === "LC" ? 5 : 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
-			evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.set.evs),
-			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
+			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
+			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
 			nature: nature || 'Serious',
 			moves: moves,
 		};
@@ -1574,8 +1570,8 @@ export class RandomGen7Teams extends RandomTeams {
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
-			evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.set.evs),
-			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
+			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
+			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
 			nature: setData.set.nature || 'Serious',
 			moves: moves,
 		};

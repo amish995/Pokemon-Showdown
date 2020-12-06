@@ -40,46 +40,6 @@ interface MafiaDataTerm {
 	memo: string[];
 }
 
-interface MafiaData {
-	// keys for all of these are IDs
-	alignments: {[k: string]: MafiaDataAlignment};
-	roles: {[k: string]: MafiaDataRole};
-	themes: {[k: string]: MafiaDataTheme};
-	IDEAs: {[k: string]: MafiaDataIDEA};
-	terms: {[k: string]: MafiaDataTerm};
-	aliases: {[k: string]: string};
-}
-interface MafiaDataAlignment {
-	name: string;
-	plural: string;
-	color?: string;
-	buttonColor?: string;
-	memo: string[];
-	image?: string;
-}
-interface MafiaDataRole {
-	name: string;
-	memo: string[];
-	alignment?: string;
-	image?: string;
-}
-interface MafiaDataTheme {
-	name: string;
-	desc: string;
-	// roles
-	[players: number]: string;
-}
-interface MafiaDataIDEA {
-	name: string;
-	roles: string[];
-	picks: string[];
-	choices: number;
-}
-interface MafiaDataTerm {
-	name: string;
-	memo: string[];
-}
-
 interface MafiaLogTable {
 	[date: string]: {[userid: string]: number};
 }
@@ -465,16 +425,14 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		if (force) {
-			this.originalRoles = roles.map(r => {
-				return {
-					name: r,
-					safeName: Utils.escapeHTML(r),
-					id: toID(r),
-					alignment: 'solo',
-					image: '',
-					memo: [`To learn more about your role, PM the host (${this.host}).`],
-				};
-			});
+			this.originalRoles = roles.map(r => ({
+				name: r,
+				safeName: Utils.escapeHTML(r),
+				id: toID(r),
+				alignment: 'solo',
+				image: '',
+				memo: [`To learn more about your role, PM the host (${this.host}).`],
+			}));
 			this.originalRoles.sort((a, b) => a.name.localeCompare(b.name));
 			this.roles = this.originalRoles.slice();
 			this.originalRoleString = this.originalRoles.map(
@@ -493,7 +451,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (const roleName of roles) {
 			const roleId = roleName.toLowerCase().replace(/[^\w\d\s]/g, '');
 			if (roleId in cache) {
-				newRoles.push(Object.assign({}, cache[roleId]));
+				newRoles.push({...cache[roleId]});
 			} else {
 				const role = MafiaTracker.parseRole(roleName);
 				if (role.problems.length) {
@@ -1220,6 +1178,8 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (this.dead[p].restless && this.dead[p].lynching === oldPlayer.id) this.dead[p].lynching = newPlayer.id;
 			}
 		}
+		if (this.hasPlurality === oldPlayer.id) this.hasPlurality = newPlayer.id;
+
 		if (newUser?.connected) {
 			for (const conn of newUser.connections) {
 				void Chat.resolvePage(`view-mafia-${this.room.roomid}`, newUser, conn);
@@ -1228,10 +1188,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (this.started) this.played.push(newPlayer.id);
 		this.sendDeclare(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`);
-		this.updatePlayers();
 
 		delete this.playerTable[oldPlayer.id];
 		oldPlayer.destroy();
+		this.updatePlayers();
 
 		if (this.room.roomid === 'mafia' && this.started) {
 			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
@@ -1513,7 +1473,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	updateRoleString() {
 		this.roleString = this.roles.map(
 			r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
-		).join(',');
+		).join(', ');
 	}
 
 	sendRoom(message: string) {
@@ -1556,7 +1516,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		const targetString = self ? `You are` : `${user.id} is`;
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...user.previousIDs]) {
-			if (this.playerTable[id] || this.played.includes(id)) return `${targetString} already in the game.`;
+			if (this.playerTable[id] || this.dead[id]) {
+				return `${targetString} already in the game.`;
+			} else if (!force && this.played.includes(id)) {
+				return `${self ? `You were` : `${user.id} was`} already in the game.`;
+			}
 			if (this.hostid === id) return `${targetString} the host.`;
 			if (this.cohosts.includes(id)) return `${targetString} a cohost.`;
 		}
@@ -1653,8 +1617,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			dead = !!player;
 		}
 
+		const staff = user.can('mute', null, this.room);
+
 		if (!player) {
-			if (this.room.auth.isStaff(user.id)) {
+			if (staff) {
 				// Uninvolved staff can talk anytime
 				return;
 			} else {
@@ -1663,18 +1629,18 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		if (player.silenced) {
-			return `You are silenced and cannot speak.${user.can('mute', null, this.room) ? " You can remove this with /mafia unsilence." : ''}`;
+			return `You are silenced and cannot speak.${staff ? " You can remove this with /mafia unsilence." : ''}`;
 		}
 
 		if (dead) {
 			if (!player.treestump) {
-				return `You are dead.${user.can('mute', null, this.room) ? " You can treestump yourself with /mafia treestump." : ''}`;
+				return `You are dead.${staff ? " You can treestump yourself with /mafia treestump." : ''}`;
 			}
 		}
 
 		if (this.phase === 'night') {
 			if (!player.nighttalk) {
-				return `You cannot talk at night.${user.can('mute', null, this.room) ? " You can bypass this using /mafia nighttalk." : ''}`;
+				return `You cannot talk at night.${staff ? " You can bypass this using /mafia nighttalk." : ''}`;
 			}
 		}
 	}
@@ -1794,7 +1760,7 @@ export const pages: PageTable = {
 				if (!pick) {
 					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
 				} else {
-					buf += `<button class="button" name="send" value="/mafia ideakey ${roomid}, ${key},">clear</button>`;
+					buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${key},">clear</button>`;
 				}
 				const selectedIndex = pick ? IDEA.originalChoices.indexOf(pick) : -1;
 				for (let i = 0; i < IDEA.originalChoices.length; i++) {
@@ -2066,9 +2032,8 @@ export const commands: ChatCommands = {
 
 		q: 'queue',
 		queue(target, room, user) {
-			room = this.requireRoom();
+			room = this.requireRoom('mafia' as RoomID);
 			if (room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const [command, targetUserID] = target.split(',').map(toID);
 
 			switch (command) {
@@ -3285,8 +3250,9 @@ export const commands: ChatCommands = {
 			let dataType = cmd;
 
 			const cmdTypes: {[k: string]: keyof MafiaData} = {
-				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms',
+				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms', idea: 'IDEAs',
 			};
+
 			if (cmd in cmdTypes) {
 				const toSearch = MafiaData[cmdTypes[cmd]];
 				// @ts-ignore guaranteed not an alias
@@ -3324,6 +3290,15 @@ export const commands: ChatCommands = {
 					}
 					buf += `${roles.join(', ')}<br/>`;
 				}
+			} else if (dataType === 'idea') {
+				if ((result as MafiaDataIDEA).picks && (result as MafiaDataIDEA).choices) {
+					buf += `<b>Number of Picks</b>: ${(result as MafiaDataIDEA).picks.length} (${(result as MafiaDataIDEA).picks.join(', ')})<br/>`;
+					buf += `<b>Number of Choices</b>: ${(result as MafiaDataIDEA).choices}<br/>`;
+				}
+				buf += `<details><summary class="button" style="font-weight: bold; display: inline-block">Roles:</summary>`;
+				for (const idearole of (result as MafiaDataIDEA).roles) {
+					buf += `${idearole}<br/>`;
+				}
 			} else {
 				// @ts-ignore
 				if (result.memo) buf += `${result.memo.join('<br/>')}`;
@@ -3336,8 +3311,8 @@ export const commands: ChatCommands = {
 
 		winfaction: 'win',
 		win(target, room, user, connection, cmd) {
+			room = this.requireRoom('mafia' as RoomID);
 			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			this.checkCan('mute', null, room);
 			const args = target.split(',');
 			let points = parseInt(args[0]);
@@ -3396,8 +3371,8 @@ export const commands: ChatCommands = {
 
 		unmvp: 'mvp',
 		mvp(target, room, user, connection, cmd) {
+			room = this.requireRoom('mafia' as RoomID);
 			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			this.checkCan('mute', null, room);
 			const args = target.split(',');
 			if (!args.length) return this.parse('/help mafia mvp');
@@ -3437,8 +3412,8 @@ export const commands: ChatCommands = {
 		mvpladder: 'leaderboard',
 		lb: 'leaderboard',
 		leaderboard(target, room, user, connection, cmd) {
+			room = this.requireRoom('mafia' as RoomID);
 			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (['hostlogs', 'playlogs', 'leaverlogs'].includes(cmd)) {
 				this.checkCan('mute', null, room);
 			} else {
@@ -3458,8 +3433,8 @@ export const commands: ChatCommands = {
 
 		unhostban: 'hostban',
 		hostban(target, room, user, connection, cmd) {
+			room = this.requireRoom('mafia' as RoomID);
 			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 
 			const [targetUser, durationString] = this.splitOne(target);
 			const targetUserID = toID(targetUser);
@@ -3495,7 +3470,7 @@ export const commands: ChatCommands = {
 		],
 
 		hostbans(target, room) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 			let buf = 'Hostbanned users:';
 			for (const [id, date] of Object.entries(hostBans)) {
@@ -3506,7 +3481,7 @@ export const commands: ChatCommands = {
 
 		overwriterole: 'addrole',
 		addrole(target, room, user, connection, cmd) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 			const overwrite = cmd === 'overwriterole';
 
@@ -3541,7 +3516,7 @@ export const commands: ChatCommands = {
 
 		overwritealignment: 'addalignment',
 		addalignment(target, room, user, connection, cmd) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 			const overwrite = cmd === 'overwritealignment';
 
@@ -3576,7 +3551,7 @@ export const commands: ChatCommands = {
 
 		overwritetheme: 'addtheme',
 		addtheme(target, room, user, connection, cmd) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 			const overwrite = cmd === 'overwritetheme';
 
@@ -3624,7 +3599,7 @@ export const commands: ChatCommands = {
 
 		overwriteidea: 'addidea',
 		addidea(target, room, user, connection, cmd) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 			const overwrite = cmd === 'overwriteidea';
 
@@ -3669,7 +3644,7 @@ export const commands: ChatCommands = {
 
 		overwriteterm: 'addterm',
 		addterm(target, room, user, connection, cmd) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 			const overwrite = cmd === 'overwriteterm';
 
@@ -3694,7 +3669,7 @@ export const commands: ChatCommands = {
 
 		overwritealias: 'addalias',
 		addalias(target, room, user, connection, cmd) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 
 			const [from, to] = target.split(',').map(toID);
@@ -3721,7 +3696,7 @@ export const commands: ChatCommands = {
 		],
 
 		deletedata(target, room, user) {
-			if (!room || room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			room = this.requireRoom('mafia' as RoomID);
 			this.checkCan('mute', null, room);
 
 			let [source, entry] = target.split(',');

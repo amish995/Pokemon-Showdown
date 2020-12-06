@@ -11,14 +11,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	aeroblast: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	anchorshot: {
-		inherit: true,
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-	},
 	assist: {
 		inherit: true,
 		isNonstandard: null,
@@ -48,19 +40,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	bind: {
-		inherit: true,
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-	},
 	blackholeeclipse: {
 		inherit: true,
 		isNonstandard: null,
 	},
-	block: {
-		inherit: true,
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-	},
 	bloomdoom: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	boneclub: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -104,7 +92,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	clamp: {
 		inherit: true,
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		isNonstandard: null,
 	},
 	clangoroussoulblaze: {
@@ -123,15 +110,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	coreenforcer: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	corkscrewcrash: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	crushgrip: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -172,10 +151,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	diamondstorm: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	dizzypunch: {
 		inherit: true,
 		isNonstandard: null,
@@ -185,10 +160,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "LGPE",
 	},
 	doubleslap: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	dragonascent: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -253,9 +224,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	fairylock: {
+	feintattack: {
 		inherit: true,
-		desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if the effect is already active.",
+		isNonstandard: null,
 	},
 	flameburst: {
 		inherit: true,
@@ -280,10 +251,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	genesissupernova: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	geomancy: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -373,23 +340,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	healingwish: {
 		inherit: true,
 		condition: {
-			duration: 2,
-			onSwitchInPriority: 1,
-			onSwitchIn(target) {
-				if (!target.fainted) {
-					target.heal(target.maxhp);
-					target.setStatus('');
-					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSlotCondition(target, 'healingwish');
-				}
-			},
-		},
-	},
-	"healingwish": {
-		inherit: true,
-		desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
-		shortDesc: "User faints. Replacement is fully healed.",
-		effect: {
 			duration: 2,
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
@@ -575,10 +525,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	landswrath: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	letssnuggleforever: {
 		inherit: true,
 		isNonstandard: null,
@@ -588,10 +534,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Unobtainable",
 	},
 	lightthatburnsthesky: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	lovelykiss: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -605,16 +547,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lunardance: {
 		inherit: true,
-		isNonstandard: null,
-	},
-	lusterpurge: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	magmastorm: {
-		inherit: true,
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-		isNonstandard: null,
+		condition: {
+			duration: 2,
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				if (!target.fainted) {
+					target.heal(target.maxhp);
+					target.setStatus('');
+					for (const moveSlot of target.moveSlots) {
+						moveSlot.pp = moveSlot.maxpp;
+					}
+					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
+					target.side.removeSlotCondition(target, 'lunardance');
+				}
+			},
+		},
 	},
 	magnetbomb: {
 		inherit: true,
@@ -627,10 +574,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	maliciousmoonsault: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	meanlook: {
-		inherit: true,
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 	},
 	meditate: {
 		inherit: true,
@@ -650,10 +593,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			"After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V-create", "Wide Guard",
 		],
 	},
-	mindblown: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	miracleeye: {
 		inherit: true,
 		isNonstandard: null,
@@ -663,10 +602,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	mirrorshot: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	mistball: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -686,10 +621,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	naturesmadness: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	needlearm: {
 		inherit: true,
 		isNonstandard: null,
@@ -702,10 +633,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	oblivionwing: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	oceanicoperetta: {
 		inherit: true,
 		isNonstandard: null,
@@ -715,10 +642,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	ominouswind: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	originpulse: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -836,10 +759,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	roaroftime: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	rockclimb: {
 		inherit: true,
 		isNonstandard: null,
@@ -852,14 +771,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	sacredfire: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	sandtomb: {
-		inherit: true,
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-	},
 	sappyseed: {
 		inherit: true,
 		accuracy: 100,
@@ -867,10 +778,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 	},
 	savagespinout: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	searingshot: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -883,10 +790,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	seedflare: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	shadowforce: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -919,10 +822,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	skillswap: {
-		inherit: true,
-		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Battle Bond, Comatose, Disguise, Illusion, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode.",
-	},
 	skydrop: {
 		inherit: true,
 		isNonstandard: null,
@@ -947,10 +846,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	spacialrend: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	sparklyswirl: {
 		inherit: true,
 		accuracy: 100,
@@ -959,7 +854,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spiderweb: {
 		inherit: true,
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		isNonstandard: null,
 	},
 	spikecannon: {
@@ -971,10 +865,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	spotlight: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	steameruption: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -1002,10 +892,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	technoblast: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	tectonicrage: {
 		inherit: true,
 		isNonstandard: null,
@@ -1018,15 +904,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		selfSwitch: false,
-		onTryHit: false,
-	},
-	thousandarrows: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	thousandwaves: {
-		inherit: true,
-		isNonstandard: null,
+		onTry: false,
 	},
 	toxicthread: {
 		inherit: true,

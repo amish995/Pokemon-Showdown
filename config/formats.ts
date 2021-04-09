@@ -24,7 +24,7 @@ export const Formats: FormatList = [
 		section: "Singles Draft"
 	},
 	{
-		name: "[Gen 8] PSS Season 8",
+		name: "[Gen 8] PSS Season 9",
 		mod: 'gen8',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause', '+Unreleased'],
 		// ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
@@ -40,7 +40,7 @@ export const Formats: FormatList = [
 			if (set.species == "Palkia" && !set.item.includes("Lustrous Orb")){
 				return ['Palkia must hold Lustrous Orb']
 			}
-			if (set.species == "Solgaleo" && !set.item.includes("")){
+			if (set.species == "Solgaleo" && set.item !== ""){
 				return ['Solgaleo must not hold an item']
 			}
 		},

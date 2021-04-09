@@ -218,7 +218,7 @@ export class BattleQueue {
 				action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
 			} else if (['switch', 'instaswitch'].includes(action.choice)) {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.battle.dex.getMove(action.pokemon.switchFlag as ID) as any;
+					action.sourceEffect = this.battle.dex.moves.get(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 			}
@@ -232,9 +232,9 @@ export class BattleQueue {
 			if (!action.targetLoc) {
 				target = this.battle.getRandomTarget(action.pokemon, action.move);
 				// TODO: what actually happens here?
-				if (target) action.targetLoc = this.battle.getTargetLoc(target, action.pokemon);
+				if (target) action.targetLoc = action.pokemon.getLocOf(target);
 			}
-			action.originalTarget = this.battle.getAtLoc(action.pokemon, action.targetLoc);
+			action.originalTarget = action.pokemon.getAtLoc(action.targetLoc);
 		}
 		if (!deferPriority) this.battle.getActionSpeed(action);
 		return actions as any;
